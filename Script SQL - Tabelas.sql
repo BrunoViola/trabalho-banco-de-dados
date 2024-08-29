@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS livraria;
+
 CREATE TABLE livraria.Secao 
 ( 
  ID INT,
@@ -11,7 +13,7 @@ CREATE TABLE livraria.Genero
  Nome VARCHAR(30),
  ID_Secao INT,
  CONSTRAINT pk_Genero PRIMARY KEY(ID),
- CONSTRAINT fk_Secao FOREIGN KEY(ID_Secao) REFERENCES Secao(ID)
+ CONSTRAINT fk_Secao FOREIGN KEY(ID_Secao) REFERENCES livraria.Secao(ID)
 );
 
 CREATE TABLE livraria.Editora 
@@ -33,8 +35,8 @@ CREATE TABLE livraria.Livro
  idEditora INT,
  
  CONSTRAINT pk_Livro PRIMARY KEY (ISBN),
- CONSTRAINT fk_Genero FOREIGN KEY (idGenero) REFERENCES Genero(ID),
- CONSTRAINT fk_Editora FOREIGN KEY (idEditora) REFERENCES Editora(ID)
+ CONSTRAINT fk_Genero FOREIGN KEY (idGenero) REFERENCES livraria.Genero(ID),
+ CONSTRAINT fk_Editora FOREIGN KEY (idEditora) REFERENCES livraria.Editora(ID)
 ); 
 
 CREATE TABLE livraria.Cliente 
@@ -73,7 +75,7 @@ CREATE TABLE livraria.Compra
  CPF_Cliente INT,
  
  CONSTRAINT pk_Compra PRIMARY KEY (Num_Nota_Fiscal),
- CONSTRAINT fk_Cliente FOREIGN KEY (CPF_Cliente) REFERENCES Cliente(CPF)
+ CONSTRAINT fk_Cliente FOREIGN KEY (CPF_Cliente) REFERENCES livraria.Cliente(CPF)
    
 ); 
 
@@ -84,8 +86,8 @@ CREATE TABLE livraria.Escrito
  ID_Autor INT,  
  ISBN_Livro INT,
  
- CONSTRAINT fk_Autor FOREIGN KEY (ID_Autor) REFERENCES Autor(ID),
- CONSTRAINT fk_Livro FOREIGN KEY (ISBN_Livro) REFERENCES Livro(ISBN),
+ CONSTRAINT fk_Autor FOREIGN KEY (ID_Autor) REFERENCES livraria.Autor(ID),
+ CONSTRAINT fk_Livro FOREIGN KEY (ISBN_Livro) REFERENCES livraria.Livro(ISBN),
  CONSTRAINT pk_Escrito PRIMARY KEY(ID_Autor, ISBN_Livro) 
 ); 
 
@@ -96,6 +98,6 @@ CREATE TABLE livraria.Possui
  Num_Nota_Fiscal_Compra INT,
 
  CONSTRAINT pk_Possui PRIMARY KEY(ISBN_Livro, Num_Nota_Fiscal_Compra), 
- CONSTRAINT fk_Possui_Livro FOREIGN KEY (ISBN_Livro) REFERENCES Livro(ISBN),
- CONSTRAINT fk_Compra FOREIGN KEY (Num_Nota_Fiscal_Compra) REFERENCES Compra(Num_Nota_Fiscal)
+ CONSTRAINT fk_Possui_Livro FOREIGN KEY (ISBN_Livro) REFERENCES livraria.Livro(ISBN),
+ CONSTRAINT fk_Compra FOREIGN KEY (Num_Nota_Fiscal_Compra) REFERENCES livraria.Compra(Num_Nota_Fiscal)
 );
