@@ -14,14 +14,14 @@ CREATE SEQUENCE livraria.Autor_seq
 
 CREATE TABLE livraria.Secao ( 
  	ID INT DEFAULT nextval('livraria.Secao_seq'),
- 	Nome VARCHAR(30) NOT NULL,  
+ 	Nome VARCHAR(50) NOT NULL,  
 	 
  	CONSTRAINT pk_Secao PRIMARY KEY(ID)  
 ); 
 
 CREATE TABLE livraria.Genero ( 
  	ID INT DEFAULT nextval('livraria.Genero_seq'),
- 	Nome VARCHAR(30) NOT NULL,
+ 	Nome VARCHAR(100) NOT NULL,
  	ID_Secao INT NOT NULL,
 	 
  	CONSTRAINT pk_Genero PRIMARY KEY(ID),
@@ -31,7 +31,7 @@ CREATE TABLE livraria.Genero (
 
 CREATE TABLE livraria.Editora ( 
 	ID INT DEFAULT nextval('livraria.Editora_seq'),
- 	Nome VARCHAR(30) NOT NULL, 
+ 	Nome VARCHAR(50) NOT NULL, 
 	
  	CONSTRAINT pk_Editora PRIMARY KEY(ID)
 ); 
@@ -54,10 +54,10 @@ CREATE TABLE livraria.Livro (
 CREATE TABLE livraria.Cliente ( 
  	Sexo CHAR,  
  	Data_nascimento DATE,  
- 	Email VARCHAR(30) NOT NULL,  
+ 	Email VARCHAR(50) NOT NULL,  
  	CPF INT NOT NULL,  
- 	Snome VARCHAR(30) NOT NULL,  
- 	Pnome VARCHAR(30) NOT NULL,  
+	Pnome VARCHAR(30) NOT NULL,
+ 	Snome VARCHAR(50) NOT NULL,    
  	Cidade VARCHAR(30) NOT NULL,  
  	Estado CHAR(2) NOT NULL,  
 
@@ -67,8 +67,8 @@ CREATE TABLE livraria.Cliente (
 CREATE TABLE livraria.Autor ( 
  	ID INT DEFAULT nextval('livraria.Autor_seq'),
  	Nacionalidade VARCHAR (20),  
- 	Pnome VARCHAR(20),
- 	Snome VARCHAR(100),  
+ 	Pnome VARCHAR(30),
+ 	Snome VARCHAR(50),  
 
  	CONSTRAINT pk_Autor PRIMARY KEY(ID),
 	CHECK(Pnome IS NOT NULL OR Snome IS NOT NULL)
