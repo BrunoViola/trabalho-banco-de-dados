@@ -16,7 +16,8 @@ CREATE TABLE livraria.Secao (
  	ID INT DEFAULT nextval('livraria.Secao_seq'),
  	Nome VARCHAR(50) NOT NULL,  
 	 
- 	CONSTRAINT pk_Secao PRIMARY KEY(ID)  
+ 	CONSTRAINT pk_Secao PRIMARY KEY(ID),
+	CONSTRAINT uk_Secao_Nome UNIQUE(Nome)  
 ); 
 
 CREATE TABLE livraria.Genero ( 
