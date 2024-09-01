@@ -55,10 +55,10 @@ CREATE TABLE livraria.Livro (
 ); 
 
 CREATE TABLE livraria.Cliente ( 
+	CPF CHAR(11) NOT NULL,
  	Sexo CHAR,  
  	Data_nascimento DATE,  
- 	Email VARCHAR(50) NOT NULL,  
- 	CPF INT NOT NULL,  
+ 	Email VARCHAR(50) NOT NULL,    
 	Pnome VARCHAR(30) NOT NULL,
  	Snome VARCHAR(50) NOT NULL,    
  	Cidade VARCHAR(30) NOT NULL,  
@@ -78,10 +78,10 @@ CREATE TABLE livraria.Autor (
 ); 
 
 CREATE TABLE livraria.Compra ( 
- 	Num_Nota_Fiscal INT NOT NULL,
+ 	Num_Nota_Fiscal BIGINT NOT NULL,
  	Data_Compra DATE DEFAULT CURRENT_TIMESTAMP,  
  	Total NUMERIC(10,2),
- 	CPF_Cliente INT NOT NULL,
+ 	CPF_Cliente CHAR(11) NOT NULL,
  
  	CONSTRAINT pk_Compra PRIMARY KEY (Num_Nota_Fiscal),
  	CONSTRAINT fk_Cliente FOREIGN KEY (CPF_Cliente) 
@@ -101,7 +101,7 @@ CREATE TABLE livraria.Escrito (
 ); 
 
 CREATE TABLE livraria.Possui ( 
-	Num_Nota_Fiscal_Compra INT NOT NULL,
+	Num_Nota_Fiscal_Compra BIGINT NOT NULL,
 	ISBN_Livro BIGINT NOT NULL,
  	Quantidade INT NOT NULL,  
  	
