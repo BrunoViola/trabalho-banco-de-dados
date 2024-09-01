@@ -26,6 +26,7 @@ CREATE TABLE livraria.Genero (
  	ID_Secao INT NOT NULL,
 	 
  	CONSTRAINT pk_Genero PRIMARY KEY(ID),
+	CONSTRAINT uk_Genero UNIQUE(Nome, ID_Secao),
  	CONSTRAINT fk_Secao FOREIGN KEY(ID_Secao) 
  		REFERENCES livraria.Secao(ID) ON DELETE CASCADE
 );
@@ -34,12 +35,13 @@ CREATE TABLE livraria.Editora (
 	ID INT DEFAULT nextval('livraria.Editora_seq'),
  	Nome VARCHAR(50) NOT NULL, 
 	
- 	CONSTRAINT pk_Editora PRIMARY KEY(ID)
+ 	CONSTRAINT pk_Editora PRIMARY KEY(ID),
+	CONSTRAINT uk_Editora UNIQUE(Nome)
 ); 
 
 CREATE TABLE livraria.Livro ( 
- 	ISBN INT NOT NULL,
- 	Titulo VARCHAR(100),  
+ 	ISBN BIGINT NOT NULL,
+ 	Titulo VARCHAR(200),  
  	Ano INT,  
  	Preco NUMERIC(10,2) NOT NULL,  
  	Estoque INT NOT NULL,  
@@ -53,10 +55,10 @@ CREATE TABLE livraria.Livro (
 ); 
 
 CREATE TABLE livraria.Cliente ( 
+	CPF CHAR(11) NOT NULL,
  	Sexo CHAR,  
  	Data_nascimento DATE,  
- 	Email VARCHAR(50) NOT NULL,  
- 	CPF INT NOT NULL,  
+ 	Email VARCHAR(50) NOT NULL,    
 	Pnome VARCHAR(30) NOT NULL,
  	Snome VARCHAR(50) NOT NULL,    
  	Cidade VARCHAR(30) NOT NULL,  
@@ -66,30 +68,30 @@ CREATE TABLE livraria.Cliente (
 ); 
 
 CREATE TABLE livraria.Autor ( 
- 	ID INT DEFAULT nextval('livraria.Autor_seq'),
- 	Nacionalidade VARCHAR (20),  
+ 	ID INT DEFAULT nextval('livraria.Autor_seq'),  
  	Pnome VARCHAR(30),
- 	Snome VARCHAR(50),  
+ 	Snome VARCHAR(50), 
+	Nacionalidade VARCHAR (20),
 
  	CONSTRAINT pk_Autor PRIMARY KEY(ID),
 	CHECK(Pnome IS NOT NULL OR Snome IS NOT NULL)
 ); 
 
 CREATE TABLE livraria.Compra ( 
- 	Num_Nota_Fiscal INT NOT NULL,
+ 	Num_Nota_Fiscal BIGINT NOT NULL,
  	Data_Compra DATE DEFAULT CURRENT_TIMESTAMP,  
  	Total NUMERIC(10,2),
- 	CPF_Cliente INT NOT NULL,
+ 	CPF_Cliente CHAR(11) NOT NULL,
  
  	CONSTRAINT pk_Compra PRIMARY KEY (Num_Nota_Fiscal),
  	CONSTRAINT fk_Cliente FOREIGN KEY (CPF_Cliente) 
-		REFERENCES livraria.Cliente(CPF) ON DELETE CASCADE,
+		REFERENCES livraria.Cliente(CPF),
 	CHECK(Total > 0)
 ); 
 
 CREATE TABLE livraria.Escrito ( 
  	ID_Autor INT NOT NULL,  
- 	ISBN_Livro INT NOT NULL,
+ 	ISBN_Livro BIGINT NOT NULL,
 	 
 	CONSTRAINT pk_Escrito PRIMARY KEY(ID_Autor, ISBN_Livro),
  	CONSTRAINT fk_Autor FOREIGN KEY (ID_Autor) 
@@ -99,20 +101,22 @@ CREATE TABLE livraria.Escrito (
 ); 
 
 CREATE TABLE livraria.Possui ( 
- 	Quantidade INT NOT NULL,  
- 	ISBN_Livro INT NOT NULL,  
- 	Num_Nota_Fiscal_Compra INT NOT NULL,
-
+	Num_Nota_Fiscal_Compra BIGINT NOT NULL,
+	ISBN_Livro BIGINT NOT NULL,
+ 	Quantidade INT NOT NULL,
+	Preco NUMERIC(10,2) NOT NULL,
+ 	
  	CONSTRAINT pk_Possui PRIMARY KEY(ISBN_Livro, Num_Nota_Fiscal_Compra), 
  	CONSTRAINT fk_Possui_Livro FOREIGN KEY (ISBN_Livro) 
-	 	REFERENCES livraria.Livro(ISBN) ON DELETE CASCADE,
+	 	REFERENCES livraria.Livro(ISBN),
  	CONSTRAINT fk_Compra FOREIGN KEY (Num_Nota_Fiscal_Compra) 
 	 	REFERENCES livraria.Compra(Num_Nota_Fiscal) ON DELETE CASCADE,
-	CHECK(Quantidade > 0)
+	CHECK(Quantidade > 0),
+	CHECK(Preco >= 0)
 ); 
 
 CREATE TABLE livraria.Pertence (
-	ISBN_Livro INT NOT NULL,  
+	ISBN_Livro BIGINT NOT NULL,  
  	ID_Genero INT NOT NULL,
 	 
 	CONSTRAINT pk_Pertence PRIMARY KEY(ISBN_Livro, ID_Genero),
