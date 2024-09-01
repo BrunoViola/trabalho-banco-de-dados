@@ -85,7 +85,7 @@ CREATE TABLE livraria.Compra (
  
  	CONSTRAINT pk_Compra PRIMARY KEY (Num_Nota_Fiscal),
  	CONSTRAINT fk_Cliente FOREIGN KEY (CPF_Cliente) 
-		REFERENCES livraria.Cliente(CPF) ON DELETE CASCADE,
+		REFERENCES livraria.Cliente(CPF),
 	CHECK(Total > 0)
 ); 
 
@@ -103,14 +103,16 @@ CREATE TABLE livraria.Escrito (
 CREATE TABLE livraria.Possui ( 
 	Num_Nota_Fiscal_Compra BIGINT NOT NULL,
 	ISBN_Livro BIGINT NOT NULL,
- 	Quantidade INT NOT NULL,  
+ 	Quantidade INT NOT NULL,
+	Preco NUMERIC(10,2) NOT NULL,
  	
  	CONSTRAINT pk_Possui PRIMARY KEY(ISBN_Livro, Num_Nota_Fiscal_Compra), 
  	CONSTRAINT fk_Possui_Livro FOREIGN KEY (ISBN_Livro) 
-	 	REFERENCES livraria.Livro(ISBN) ON DELETE CASCADE,
+	 	REFERENCES livraria.Livro(ISBN),
  	CONSTRAINT fk_Compra FOREIGN KEY (Num_Nota_Fiscal_Compra) 
 	 	REFERENCES livraria.Compra(Num_Nota_Fiscal) ON DELETE CASCADE,
-	CHECK(Quantidade > 0)
+	CHECK(Quantidade > 0),
+	CHECK(Preco >= 0)
 ); 
 
 CREATE TABLE livraria.Pertence (
