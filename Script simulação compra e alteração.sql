@@ -21,6 +21,14 @@ COMMIT;
 
 SELECT * FROM livraria.Possui WHERE Num_Nota_Fiscal_Compra = '1234567800012345';
 
+-- Atualizando o estoque dos livros comprados
+UPDATE livraria.Livro
+SET Estoque = Estoque - (SELECT Quantidade FROM livraria.Possui WHERE ISBN_Livro = '9788532649966' AND Num_Nota_Fiscal_Compra = '1234567800012345')
+WHERE ISBN = '9788532649966';
+
+UPDATE livraria.Livro
+SET Estoque = Estoque - (SELECT Quantidade FROM livraria.Possui WHERE ISBN_Livro = '9786586551525' AND Num_Nota_Fiscal_Compra = '1234567800012345')
+WHERE ISBN = '9786586551525';
 
 -- Alterando o preço de um livro
 UPDATE livraria.Livro SET Preco = '60.00' WHERE ISBN = '9786586551525';
