@@ -108,7 +108,7 @@ CREATE TABLE livraria.Possui (
  	
  	CONSTRAINT pk_Possui PRIMARY KEY(ISBN_Livro, Num_Nota_Fiscal_Compra), 
  	CONSTRAINT fk_Possui_Livro FOREIGN KEY (ISBN_Livro) 
-	 	REFERENCES livraria.Livro(ISBN),
+	 	REFERENCES livraria.Livro(ISBN) ON DELETE CASCADE,
  	CONSTRAINT fk_Compra FOREIGN KEY (Num_Nota_Fiscal_Compra) 
 	 	REFERENCES livraria.Compra(Num_Nota_Fiscal) ON DELETE CASCADE,
 	CHECK(Quantidade > 0),

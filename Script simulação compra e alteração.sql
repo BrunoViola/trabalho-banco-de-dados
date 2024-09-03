@@ -45,9 +45,3 @@ Ao contrário do que a imprensa e a indústria da tecnologia costumam difundir, 
 O neurocientista Michel Desmurget, diretor de pesquisa do Instituto Nacional de Saúde da França, propõe a primeira síntese de vários estudos que confirmaram os perigos reais das telas e nos alerta para as graves consequências de continuarmos a promover sem senso crítico o uso dessas tecnologias. ' 
 WHERE ISBN = '9786586551525';
 SELECT * FROM livraria.Livro WHERE ISBN = '9786586551525';
-
---Deletando uma editora (causando a remoção de livros, mas não deleta o ISBN do Possui)
-DELETE FROM livraria.Editora WHERE Nome = 'Vestígio';
-SELECT * FROM livraria.editora ORDER BY id ASC;
-
-SELECT * FROM livraria.Possui WHERE Num_Nota_Fiscal_Compra = '1234567800012345';
