@@ -31,10 +31,10 @@ public class PgSecaoDAO implements SecaoDAO{
                                 "DELETE FROM livraria.Secao WHERE ID = ?;";
 
    private static final String ALL_QUERY =
-                                "SELECT id, Nome FROM livraria.Secao ORDER BY ID;";
+                                "SELECT ID, Nome FROM livraria.Secao ORDER BY ID;";
 
    private static final String GET_BY_NOME =
-                                "SELECT id, Nome FROM livraria.Secao " +
+                                "SELECT ID, Nome FROM livraria.Secao " +
                                 "WHERE Nome = ?;";       
    
    

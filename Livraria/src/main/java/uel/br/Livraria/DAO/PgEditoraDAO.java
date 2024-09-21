@@ -31,13 +31,13 @@ public class PgEditoraDAO implements EditoraDAO{
                                 "DELETE FROM livraria.Editora WHERE ID = ?;";
 
    private static final String ALL_QUERY =
-                                "SELECT id, Nome FROM livraria.Editora ORDER BY ID;";
+                                "SELECT ID, Nome FROM livraria.Editora ORDER BY ID;";
 
    private static final String GET_BY_NOME =
-                                "SELECT id, Nome FROM livraria.Editora " +
-                                "WHERE Nome = ?;";       
-   
-   
+                                "SELECT ID, Nome FROM livraria.Editora " +
+                                "WHERE Nome = ?;";
+
+
    // ====== BUSCA POR PNOME =====
    public Editora getByNome(String Nome) throws SQLException {
       Editora editora = new Editora();
@@ -53,7 +53,7 @@ public class PgEditoraDAO implements EditoraDAO{
          }
       } catch (SQLException ex) {
          Logger.getLogger(PgEditoraDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
-            
+
          if (ex.getMessage().equals("Erro ao visualizar: editora não encontrada.")) {
             throw ex;
          } else {
@@ -62,9 +62,9 @@ public class PgEditoraDAO implements EditoraDAO{
       }
       return editora;
    }
-                                
-                                
-   // ===== CREATE EDITORA =====                             
+
+
+   // ===== CREATE EDITORA =====
    @Override
     public void create(Editora editora) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY)) {
@@ -81,9 +81,9 @@ public class PgEditoraDAO implements EditoraDAO{
            }else {
                throw new SQLException("Erro ao inserir editora.");
            }
-        }        
+        }
     }
-   
+
    // ===== READ EDITORA =====
    @Override
    public Editora read(Integer ID) throws SQLException {
@@ -101,7 +101,7 @@ public class PgEditoraDAO implements EditoraDAO{
          }
       } catch (SQLException ex) {
          Logger.getLogger(PgEditoraDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
-            
+
          if (ex.getMessage().equals("Erro ao visualizar: editora não encontrada.")) {
             throw ex;
          } else {
@@ -110,7 +110,7 @@ public class PgEditoraDAO implements EditoraDAO{
       }
 
       return editora;
-   } 
+   }
 
    // ===== UPDATE EDITORA =====
    @Override
@@ -126,7 +126,7 @@ public class PgEditoraDAO implements EditoraDAO{
          }
        } catch (SQLException ex) {
          Logger.getLogger(PgEditoraDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
- 
+
          if (ex.getMessage().equals("Erro ao editar: editora não encontrada.")) {
              throw ex;
          } else if (ex.getMessage().contains("not-null")) {
@@ -134,9 +134,9 @@ public class PgEditoraDAO implements EditoraDAO{
          } else {
              throw new SQLException("Erro ao editar editora.");
          }
-     }        
+     }
    }
-   
+
    // ===== DELETE EDITORA =====
    @Override
    public void delete(Integer ID) throws SQLException {
@@ -177,6 +177,6 @@ public class PgEditoraDAO implements EditoraDAO{
          throw new SQLException("Erro ao listar editoras.");
       }
 
-      return editoraList;        
+      return editoraList;
    }
 }
