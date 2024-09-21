@@ -19,22 +19,22 @@ public class PgAutorDAO implements AutorDAO{
    }
 
    private static final String CREATE_QUERY =
-                                "INSERT INTO livraria.autor(Pnome, Snome, Nacionalidade) " + "VALUES(?, ?, ?);";
+                                "INSERT INTO livraria.Autor(Pnome, Snome, Nacionalidade) " + "VALUES(?, ?, ?);";
 
    private static final String READ_QUERY =
-                                "SELECT Pnome, Snome, Nacionalidade FROM livraria.autor " +
+                                "SELECT Pnome, Snome, Nacionalidade FROM livraria.Autor " +
                                 "WHERE ID = ?;";
 
    private static final String UPDATE_QUERY =
-                                "UPDATE livraria.autor " +
+                                "UPDATE livraria.Autor " +
                                 "SET Pnome = ?, Snome = ?, Nacionalidade = ? " +
                                 "WHERE ID = ?;";
 
    private static final String DELETE_QUERY =
-                                "DELETE FROM livraria.autor WHERE ID = ?;";
+                                "DELETE FROM livraria.Autor WHERE ID = ?;";
 
    private static final String ALL_QUERY =
-                                "SELECT id, login FROM livraria.autor ORDER BY ID;";
+                                "SELECT ID, Nome, Pnome, Nacionalidade FROM livraria.Autor ORDER BY ID;";
 
    // ===== CREATE AUTOR =====                             
    @Override
@@ -100,7 +100,7 @@ public class PgAutorDAO implements AutorDAO{
          statement.setInt(4, autor.getID()); // esse ID entrará no placeholder do WHERE ID = ?
 
          if (statement.executeUpdate() < 1) {
-            throw new SQLException("Erro ao editar: usuário não encontrado.");
+            throw new SQLException("Erro ao editar: autor não encontrado.");
          }
        } catch (SQLException ex) {
          Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
