@@ -42,4 +42,19 @@ public class PgDAOFactory extends DAOFactory{
     public SecaoDAO getSecaoDAO() {
         return new PgSecaoDAO(this.connection);
     }
+
+    @Override
+    public EscritoDAO getEscritoDAO() {
+        return new PgEscritoDAO(this.connection);
+    }
+
+    @Override
+    public PossuiDAO getPossuiDAO() {
+        return new PgPossuiDAO(this.connection);
+    }
+
+    @Override
+    public PertenceDAO getPertenceDAO() {
+        return new PgPertenceDAO(this.connection);
+    }
 }

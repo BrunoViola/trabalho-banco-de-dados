@@ -64,7 +64,8 @@ CREATE TABLE livraria.Cliente (
  	Cidade VARCHAR(30) NOT NULL,  
  	Estado CHAR(2) NOT NULL,  
 
- 	CONSTRAINT pk_Cliente PRIMARY KEY (CPF)
+ 	CONSTRAINT pk_Cliente PRIMARY KEY (CPF),
+	CONSTRAINT uk_Cliente UNIQUE(Email)
 ); 
 
 CREATE TABLE livraria.Autor ( 
