@@ -31,10 +31,10 @@ public class PgEditoraDAO implements EditoraDAO{
                                 "DELETE FROM livraria.Editora WHERE ID = ?;";
 
    private static final String ALL_QUERY =
-                                "SELECT id, Nome FROM livraria.Editora ORDER BY ID;";
+                                "SELECT ID, Nome FROM livraria.Editora ORDER BY ID;";
 
    private static final String GET_BY_NOME =
-                                "SELECT id, Nome FROM livraria.Editora " +
+                                "SELECT ID, Nome FROM livraria.Editora " +
                                 "WHERE Nome = ?;";       
    
    
