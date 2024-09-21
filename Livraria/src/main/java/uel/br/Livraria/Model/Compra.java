@@ -8,7 +8,7 @@ public class Compra {
     private BigInteger Num_Nota_Fiscal;
     private Date Data_Compra;
     private BigDecimal Total;
-    private String CPF_Cliente;
+    private Cliente cliente;
 
     public BigInteger getNum_Nota_Fiscal() {
         return Num_Nota_Fiscal;
@@ -34,11 +34,11 @@ public class Compra {
         Total = total;
     }
 
-    public String getCPF_Cliente() {
-        return CPF_Cliente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setCPF_Cliente(String CPF_Cliente) {
-        this.CPF_Cliente = CPF_Cliente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }
