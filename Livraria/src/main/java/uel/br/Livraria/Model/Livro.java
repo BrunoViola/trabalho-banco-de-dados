@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class Livro {
-    private BigInteger ISBN;
+    private Long ISBN;
     private String Titulo;
     private Integer Ano;
     private BigDecimal Preco;
@@ -12,11 +12,11 @@ public class Livro {
     private String Descricao;
     private Editora editora;
 
-    public BigInteger getISBN() {
+    public long getISBN() {
         return ISBN;
     }
 
-    public void setISBN(BigInteger ISBN) {
+    public void setISBN(Long ISBN) {
         this.ISBN = ISBN;
     }
 
