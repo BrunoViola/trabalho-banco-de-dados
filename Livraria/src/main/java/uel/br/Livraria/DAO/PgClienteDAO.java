@@ -39,7 +39,7 @@ public class PgClienteDAO implements ClienteDAO{
             "DELETE FROM livraria.Cliente WHERE CPF = ?;";
 
     private static final String ALL_QUERY =
-            "SELECT CPF, Email FROM livraria.Cliente ORDER BY Pnome;";
+            "SELECT CPF, Sexo, Data_nascimento, Email, Pnome, Snome, Cidade, Estado FROM livraria.Cliente ORDER BY Pnome;";
 
     // ===== CREATE CLIENTE =====
     @Override
