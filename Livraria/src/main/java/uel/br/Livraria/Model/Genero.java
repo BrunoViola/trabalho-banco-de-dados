@@ -3,7 +3,7 @@ package uel.br.Livraria.Model;
 public class Genero {
     private Integer ID;
     private String Nome;
-    private Integer ID_Secao;
+    private Secao secao;
 
     public Integer getID() {
         return ID;
@@ -21,11 +21,11 @@ public class Genero {
         Nome = nome;
     }
 
-    public Integer getID_Secao() {
-        return ID_Secao;
+    public Secao getSecao() {
+        return secao;
     }
 
-    public void setID_Secao(Integer ID_Secao) {
-        this.ID_Secao = ID_Secao;
+    public void setSecao(Secao secao) {
+        this.secao = secao;
     }
 }
