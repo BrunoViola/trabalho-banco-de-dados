@@ -10,7 +10,7 @@ public class Livro {
     private BigDecimal Preco;
     private Integer Estoque;
     private String Descricao;
-    private Integer Editora;
+    private Editora editora;
 
     public BigInteger getISBN() {
         return ISBN;
@@ -60,11 +60,11 @@ public class Livro {
         Descricao = descricao;
     }
 
-    public Integer getEditora() {
-        return Editora;
+    public Editora getEditora() {
+        return editora;
     }
 
-    public void setEditora(Integer editora) {
-        Editora = editora;
+    public void setEditora(Editora editora) {
+        this.editora = editora;
     }
 }
