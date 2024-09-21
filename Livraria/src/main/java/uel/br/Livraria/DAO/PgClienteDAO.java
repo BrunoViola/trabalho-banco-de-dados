@@ -32,7 +32,7 @@ public class PgClienteDAO implements ClienteDAO{
 
     private static final String UPDATE_QUERY =
             "UPDATE livraria.Cliente " +
-                    "SET Sexo = ?, Data_nascimento = ?, Email = ?, Pnome = ?, Snome = ?, Cidade = ?, Estado = ?" +
+                    "SET Sexo = ?, Data_nascimento = ?, Email = ?, Pnome = ?, Snome = ?, Cidade = ?, Estado = ? " +
                     "WHERE CPF = ?;";
 
     private static final String DELETE_QUERY =
@@ -46,7 +46,7 @@ public class PgClienteDAO implements ClienteDAO{
     public Cliente getByEmail(String Email) throws SQLException {
         Cliente cliente = new Cliente();
 
-        try (PreparedStatement statement = connection.prepareStatement(READ_QUERY)) {
+        try (PreparedStatement statement = connection.prepareStatement(GET_BY_EMAIL)) {
             statement.setString(1, Email);
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
