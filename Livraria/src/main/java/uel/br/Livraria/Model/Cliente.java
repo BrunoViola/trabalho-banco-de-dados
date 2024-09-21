@@ -28,8 +28,8 @@ public class Cliente {
         Sexo = sexo;
     }
 
-    public Date getData_nascimento() {
-        return Data_nascimento;
+    public java.sql.Date getData_nascimento() {
+        return (java.sql.Date) Data_nascimento;
     }
 
     public void setData_nascimento(Date data_nascimento) {
