@@ -5,16 +5,16 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class Compra {
-    private BigInteger Num_Nota_Fiscal;
+    private Long Num_Nota_Fiscal;
     private Date Data_Compra;
     private BigDecimal Total;
     private Cliente cliente;
 
-    public BigInteger getNum_Nota_Fiscal() {
+    public Long getNum_Nota_Fiscal() {
         return Num_Nota_Fiscal;
     }
 
-    public void setNum_Nota_Fiscal(BigInteger num_Nota_Fiscal) {
+    public void setNum_Nota_Fiscal(Long num_Nota_Fiscal) {
         Num_Nota_Fiscal = num_Nota_Fiscal;
     }
 
