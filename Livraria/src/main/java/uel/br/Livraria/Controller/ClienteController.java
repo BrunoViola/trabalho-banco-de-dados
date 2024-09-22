@@ -40,10 +40,9 @@ public class ClienteController {
         }
     }
 
-    @PutMapping("/{cpf}")
-    public ResponseEntity<String> atualizarCliente(@PathVariable String cpf, @RequestBody Cliente cliente) {
+    @PutMapping
+    public ResponseEntity<String> atualizarCliente(@RequestBody Cliente cliente) {
         try {
-            cliente.setCPF(cpf);
             pgClienteDAO.update(cliente);
             return ResponseEntity.ok("Cliente atualizado com sucesso!");
         } catch (SQLException e) {

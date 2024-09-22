@@ -42,10 +42,9 @@ public class AutorController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> atualizarAutor(@PathVariable int id, @RequestBody Autor autor) {
+    @PutMapping
+    public ResponseEntity<String> atualizarAutor(@RequestBody Autor autor) {
         try {
-            autor.setID(id);
             pgAutorDAO.update(autor);
             return ResponseEntity.ok("Autor atualizado com sucesso!");
         } catch (SQLException e) {

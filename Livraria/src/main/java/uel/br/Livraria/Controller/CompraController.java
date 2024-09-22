@@ -42,10 +42,9 @@ public class CompraController {
         }
     }
 
-    @PutMapping("/{notaNum}")
-    public ResponseEntity<String> atualizarCompra(@PathVariable long notaNum, @RequestBody Compra compra) {
+    @PutMapping
+    public ResponseEntity<String> atualizarCompra(@RequestBody Compra compra) {
         try {
-            compra.setNum_Nota_Fiscal(notaNum);
             pgCompraDAO.update(compra);
             return ResponseEntity.ok("Compra atualizada com sucesso!");
         } catch (SQLException e) {

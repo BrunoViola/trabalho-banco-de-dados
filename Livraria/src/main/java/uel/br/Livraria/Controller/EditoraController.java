@@ -40,10 +40,9 @@ public class EditoraController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> atualizarEditora(@PathVariable int id, @RequestBody Editora editora) {
+    @PutMapping
+    public ResponseEntity<String> atualizarEditora(@RequestBody Editora editora) {
         try {
-            editora.setID(id);
             pgEditoraDAO.update(editora);
             return ResponseEntity.ok("Editora atualizada com sucesso!");
         } catch (SQLException e) {
