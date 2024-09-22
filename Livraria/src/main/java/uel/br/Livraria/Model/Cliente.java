@@ -1,6 +1,6 @@
 package uel.br.Livraria.Model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Cliente {
     private String CPF;

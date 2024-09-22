@@ -1,8 +1,7 @@
 package uel.br.Livraria.Model;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
+import java.sql.Date;
 
 public class Compra {
     private Long Num_Nota_Fiscal;
