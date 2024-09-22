@@ -69,7 +69,7 @@ public class PgCompraDAO implements CompraDAO{
    
    // ===== READ COMPRA =====
    @Override
-   public Compra read(BigInteger Num_Nota_Fiscal) throws SQLException {
+   public Compra read(Long Num_Nota_Fiscal) throws SQLException {
       Compra compra = new Compra();
 
       try (PreparedStatement statement = connection.prepareStatement(READ_QUERY)) {
@@ -131,9 +131,9 @@ public class PgCompraDAO implements CompraDAO{
    
    // ===== DELETE COMPRA =====
    @Override
-   public void delete(BigInteger Num_Nota_Fiscal) throws SQLException {
+   public void delete(Long Num_Nota_Fiscal) throws SQLException {
      try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)) {
-         statement.setLong(1, Num_Nota_Fiscal.longValue());
+         statement.setLong(1, Num_Nota_Fiscal);
 
          if (statement.executeUpdate() < 1) {
              throw new SQLException("Erro ao excluir: compra não encontrada.");
@@ -158,7 +158,7 @@ public class PgCompraDAO implements CompraDAO{
          ResultSet result = statement.executeQuery()) {
          while (result.next()) {
             Compra compra = new Compra();
-            compra.setNum_Nota_Fiscal(BigInteger.valueOf(result.getLong("Num_Nota_Fiscal")));
+            compra.setNum_Nota_Fiscal(result.getLong("Num_Nota_Fiscal"));
             compra.setData_Compra(result.getDate("Data_Compra"));
             compra.setTotal(result.getBigDecimal("Total"));
             Cliente cliente = clienteDAO.read(result.getString("CPF_Cliente"));

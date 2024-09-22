@@ -28,7 +28,7 @@ public class PgEscritoDAO implements  EscritoDAO{
             "INSERT INTO livraria.Escrito(ID_Autor, ISBN_Livro) " + "VALUES(?, ?);";
 
     private static final String DELETE_QUERY =
-            "DELETE FROM livraria.Escrito WHERE (ID_Autor = ? AND ISBN_Livro = ?)";
+            "DELETE FROM livraria.Escrito WHERE (ID_Autor = ? AND ISBN_Livro = ?);";
 
     private static final String ALL_QUERY =
             "SELECT ID_Autor, ISBN_Livro FROM livraria.Escrito ORDER BY ID_Autor;";
