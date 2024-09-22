@@ -1,9 +1,7 @@
 package uel.br.Livraria.DAO;
 
 import org.springframework.stereotype.Repository;
-import uel.br.Livraria.Model.Autor;
-import uel.br.Livraria.Model.Escrito;
-import uel.br.Livraria.Model.Livro;
+import uel.br.Livraria.Model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,6 +26,9 @@ public class PgEscritoDAO implements  EscritoDAO{
 
     private static final String CREATE_QUERY =
             "INSERT INTO livraria.Escrito(ID_Autor, ISBN_Livro) " + "VALUES(?, ?);";
+
+    private static final String READ_QUERY =
+            "SELECT * FROM livraria.Escrito WHERE (ID_Autor = ? AND ISBN_Livro = ?);";
 
     private static final String DELETE_QUERY =
             "DELETE FROM livraria.Escrito WHERE (ID_Autor = ? AND ISBN_Livro = ?);";
@@ -54,6 +55,39 @@ public class PgEscritoDAO implements  EscritoDAO{
                 throw new SQLException("Erro ao inserir relacionamento 'escrito'.");
             }
         }
+    }
+
+    // ===== READ ESCRITO =====
+    @Override
+    public Escrito read(Integer ID_Autor, Long ISBN_Livro) throws SQLException {
+        Escrito escrito = new Escrito();
+
+        Autor autor;
+        Livro livro;
+        try (PreparedStatement statement = connection.prepareStatement(READ_QUERY)) {
+            statement.setLong(1, ID_Autor);
+            statement.setLong(2, ISBN_Livro);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    autor = pgAutorDAO.read(ID_Autor);
+                    livro = pgLivroDAO.read(ISBN_Livro);
+                    escrito.setAutor(autor);
+                    escrito.setLivro(livro);
+                } else {
+                    throw new SQLException("Erro ao visualizar: relacionamento 'escrito' não encontrado.");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PgPossuiDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+            if (ex.getMessage().equals("Erro ao visualizar: relacionamento 'escrito' não encontrado.")) {
+                throw ex;
+            } else {
+                throw new SQLException("Erro ao visualizar relacionamento 'escrito'.");
+            }
+        }
+
+        return escrito;
     }
 
     // Para satisfazer DAO:
