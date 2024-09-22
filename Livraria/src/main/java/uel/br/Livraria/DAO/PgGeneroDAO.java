@@ -1,6 +1,5 @@
 package uel.br.Livraria.DAO;
 
-import uel.br.Livraria.Model.Editora;
 import uel.br.Livraria.Model.Genero;
 import uel.br.Livraria.Model.Secao;
 
