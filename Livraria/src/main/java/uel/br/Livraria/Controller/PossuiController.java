@@ -7,10 +7,7 @@ import java.util.List;
 
 import uel.br.Livraria.DAO.*;
 
-import uel.br.Livraria.JDBC.PgConnectionFactory;
 import uel.br.Livraria.Model.Possui;
-import uel.br.Livraria.Model.Compra;
-import uel.br.Livraria.Model.Livro;
 
 import java.sql.SQLException;
 
@@ -48,11 +45,8 @@ public class PossuiController {
         }
     }
     
-    @PutMapping("/{numNotaFiscal}/{ISBN}")
-    public ResponseEntity<String> atualizarPossui(
-      @PathVariable("numNotaFiscal") Long numNotaFiscal,
-      @PathVariable("ISBN") Long ISBN,
-      @RequestBody Possui possui) {
+    @PutMapping
+    public ResponseEntity<String> atualizarPossui(@RequestBody Possui possui) {
       try {
           pgPossuiDAO.update(possui);
           return ResponseEntity.ok("Atualizado com sucesso");
@@ -64,7 +58,7 @@ public class PossuiController {
     }
 
     @DeleteMapping("/{numNotaFiscal}/{ISBN}")
-    public ResponseEntity<String> deletarSecao(@PathVariable("numNotaFiscal") Long numNotaFiscal, @PathVariable("ISBN") Long ISBN) {
+    public ResponseEntity<String> deletarPossui(@PathVariable("numNotaFiscal") Long numNotaFiscal, @PathVariable("ISBN") Long ISBN) {
         try {
             pgPossuiDAO.delete(numNotaFiscal, ISBN);
             return ResponseEntity.ok("Relacionamento 'possui' deletado com sucesso!");
