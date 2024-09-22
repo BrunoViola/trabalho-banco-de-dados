@@ -1,5 +1,6 @@
 package uel.br.Livraria.DAO;
 
+import uel.br.Livraria.Model.Editora;
 import uel.br.Livraria.Model.Genero;
 import uel.br.Livraria.Model.Secao;
 
@@ -35,7 +36,7 @@ public class PgGeneroDAO implements GeneroDAO{
                                 "DELETE FROM livraria.Genero WHERE ID = ?;";
 
    private static final String ALL_QUERY =
-                                "SELECT ID, Nome FROM livraria.Genero ORDER BY ID;";
+                                "SELECT ID, Nome, ID_Secao FROM livraria.Genero ORDER BY ID;";
 
    private static final String GET_BY_NOME_IDSECAO =
                                 "SELECT ID, Nome FROM livraria.Genero " +
@@ -132,12 +133,12 @@ public class PgGeneroDAO implements GeneroDAO{
          statement.setInt(3, genero.getID());
 
          if (statement.executeUpdate() < 1) {
-            throw new SQLException("Erro ao editar: gênero não encontrada.");
+            throw new SQLException("Erro ao editar: gênero não encontrado.");
          }
        } catch (SQLException ex) {
          Logger.getLogger(PgGeneroDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
  
-         if (ex.getMessage().equals("Erro ao editar: gênero não encontrada.")) {
+         if (ex.getMessage().equals("Erro ao editar: gênero não encontrado.")) {
              throw ex;
          } else if (ex.getMessage().contains("not-null")) {
              throw new SQLException("Erro ao editar gênero: campo obrigatório está em branco.");
@@ -154,12 +155,12 @@ public class PgGeneroDAO implements GeneroDAO{
          statement.setInt(1, ID);
 
          if (statement.executeUpdate() < 1) {
-             throw new SQLException("Erro ao excluir: gênero não encontrada.");
+             throw new SQLException("Erro ao excluir: gênero não encontrado.");
          }
      } catch (SQLException ex) {
          Logger.getLogger(PgGeneroDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
-         if (ex.getMessage().equals("Erro ao excluir: gênero não encontrada.")) {
+         if (ex.getMessage().equals("Erro ao excluir: gênero não encontrado.")) {
              throw ex;
          } else {
              throw new SQLException("Erro ao excluir gênero.");
@@ -178,7 +179,8 @@ public class PgGeneroDAO implements GeneroDAO{
             Genero genero = new Genero();
             genero.setID(result.getInt("ID"));
             genero.setNome(result.getString("Nome"));
-
+            Secao secao = secaoDAO.read(result.getInt("ID_Secao"));
+            genero.setSecao(secao);
             generoList.add(genero);
          }
       } catch (SQLException ex) {

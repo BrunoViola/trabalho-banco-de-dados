@@ -34,7 +34,7 @@ public class PgAutorDAO implements AutorDAO{
                                 "DELETE FROM livraria.Autor WHERE ID = ?;";
 
    private static final String ALL_QUERY =
-                                "SELECT ID, Nome, Pnome, Nacionalidade FROM livraria.Autor ORDER BY ID;";
+                                "SELECT ID, Pnome, Snome, Nacionalidade FROM livraria.Autor ORDER BY ID;";
 
    // ===== CREATE AUTOR =====                             
    @Override
