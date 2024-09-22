@@ -14,11 +14,11 @@ import java.util.logging.Logger;
 
 public class PgLivroDAO implements LivroDAO{
     private final Connection connection;
-    private final PgEditoraDAO editoraDAO;
+    private final PgEditoraDAO pgEditoraDAO;
 
     public PgLivroDAO(Connection connection) {
         this.connection = connection;
-        this.editoraDAO = new PgEditoraDAO(connection);
+        this.pgEditoraDAO = new PgEditoraDAO(connection);
     }
 
     private static final String CREATE_QUERY =
@@ -70,6 +70,8 @@ public class PgLivroDAO implements LivroDAO{
     public Livro read(Long ISBN) throws SQLException {
         Livro livro = new Livro();
 
+        int editoraId;
+        Editora editora;
         try (PreparedStatement statement = connection.prepareStatement(READ_QUERY)) {
             statement.setLong(1, ISBN);
             try (ResultSet result = statement.executeQuery()) {
@@ -80,8 +82,8 @@ public class PgLivroDAO implements LivroDAO{
                     livro.setPreco(result.getBigDecimal("Preco"));
                     livro.setEstoque(result.getInt("Estoque"));
                     livro.setDescricao(result.getString("Descricao"));
-                    int editoraId = result.getInt("ID_Editora");
-                    Editora editora = editoraDAO.read(editoraId);
+                    editoraId = result.getInt("ID_Editora");
+                    editora = pgEditoraDAO.read(editoraId);
                     livro.setEditora(editora);
                 } else {
                     throw new SQLException("Erro ao visualizar: livro não encontrado.");
@@ -155,6 +157,7 @@ public class PgLivroDAO implements LivroDAO{
     public List<Livro> all() throws SQLException {
         List<Livro> livroList = new ArrayList<>();
         int editoraId;
+        Editora editora;
 
         try (PreparedStatement statement = connection.prepareStatement(ALL_QUERY);
              ResultSet result = statement.executeQuery()) {
@@ -167,7 +170,7 @@ public class PgLivroDAO implements LivroDAO{
                 livro.setEstoque(result.getInt("Estoque"));
                 livro.setDescricao(result.getString("Descricao"));
                 editoraId = result.getInt("ID_Editora");
-                Editora editora = editoraDAO.read(editoraId);
+                editora = pgEditoraDAO.read(editoraId);
                 livro.setEditora(editora);
 
                 livroList.add(livro);
