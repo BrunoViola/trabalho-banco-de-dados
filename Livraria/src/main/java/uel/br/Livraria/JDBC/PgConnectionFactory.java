@@ -1,55 +1,36 @@
 package uel.br.Livraria.JDBC;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
+@Configuration
 public class PgConnectionFactory extends ConnectionFactory{
-    private String Host;
-    private String Port;
-    private String Name;
-    private String User;
+    @Value("${spring.datasource.url}")
+    private String URL;
+    @Value("${spring.datasource.username}")
+    private String Username;
+    @Value("${spring.datasource.password}")
     private String Password;
 
     public PgConnectionFactory(){
     }
 
-    public void getProperties() throws IOException {
-        Properties properties = new Properties();
-
-        try {
-            InputStream input = this.getClass().getClassLoader().getResourceAsStream(propertiesPath);
-            properties.load(input);
-            Host = properties.getProperty("host");
-            Port = properties.getProperty("port");
-            Name = properties.getProperty("name");
-            User = properties.getProperty("user");
-            Password = properties.getProperty("password");
-        } catch (IOException exception) {
-            System.err.println(exception.getMessage());
-            throw  new IOException("Erro ao obter informações do banco de dados.");
-        }
-    }
-
+    @Bean
     @Override
-    public Connection getConnection() throws IOException, SQLException, ClassNotFoundException {
-        Connection connetion = null;
-
+    public Connection getConnection() throws SQLException {
+        Connection connection = null;
         try {
-            Class.forName("org.postgresql.Driver");
-            getProperties();
-            String url = "jdbc:postgresql://" + Host + ":" + Port + "/" + Name;
-            connetion = DriverManager.getConnection(url, User, Password);
-        } catch (ClassNotFoundException ex) {
-            System.err.println(ex.getMessage());
-            throw new ClassNotFoundException("Erro de conexão ao banco de dados.");
+            connection = DriverManager.getConnection(URL, Username, Password);
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
             throw new SQLException("Erro de conexão ao banco de dados.");
         }
-        return connetion;
+        return connection;
     }
 }

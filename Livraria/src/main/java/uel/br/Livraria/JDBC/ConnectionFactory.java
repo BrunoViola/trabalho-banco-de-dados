@@ -8,11 +8,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-@Configuration
 public abstract class ConnectionFactory {
 
     private static ConnectionFactory instance = null;
-    protected static String propertiesPath = "src/main/resources/application.properties";
+    protected static String propertiesPath = "../../conf/datasource.properties";
     private static String dbServer;
 
     protected ConnectionFactory() {
