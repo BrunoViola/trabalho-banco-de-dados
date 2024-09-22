@@ -42,10 +42,9 @@ public class GeneroController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> atualizarGenero(@PathVariable int id, @RequestBody Genero genero) {
+    @PutMapping
+    public ResponseEntity<String> atualizarGenero(@RequestBody Genero genero) {
         try {
-            genero.setID(id);
             pgGeneroDAO.update(genero);
             return ResponseEntity.ok("Gênero atualizado com sucesso!");
         } catch (SQLException e) {

@@ -24,7 +24,7 @@ public class SecaoController {
             pgSecaoDAO.create(secao);
             return ResponseEntity.ok("Seção criada com sucesso!");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar secao.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar seção.");
         }
     }
 
@@ -42,14 +42,13 @@ public class SecaoController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> atualizarSecao(@PathVariable int id, @RequestBody Secao secao) {
+    @PutMapping
+    public ResponseEntity<String> atualizarSecao(@RequestBody Secao secao) {
         try {
-            secao.setID(id);
             pgSecaoDAO.update(secao);
-            return ResponseEntity.ok("Secao atualizada com sucesso!");
+            return ResponseEntity.ok("Seção atualizada com sucesso!");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar secao.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar seção.");
         }
     }
 
@@ -57,9 +56,9 @@ public class SecaoController {
     public ResponseEntity<String> deletarSecao(@PathVariable int id) {
         try {
             pgSecaoDAO.delete(id);
-            return ResponseEntity.ok("Secao deletada com sucesso!");
+            return ResponseEntity.ok("Seção deletada com sucesso!");
         } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar secao.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar seção.");
         }
     }
 

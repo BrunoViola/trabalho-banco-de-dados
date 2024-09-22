@@ -42,10 +42,9 @@ public class LivroController {
         }
     }
 
-    @PutMapping("/{ISBN}")
-    public ResponseEntity<String> atualizarLivro(@PathVariable Long ISBN, @RequestBody Livro livro) {
+    @PutMapping
+    public ResponseEntity<String> atualizarLivro(@RequestBody Livro livro) {
         try {
-            livro.setISBN(ISBN);
             pgLivroDAO.update(livro);
             return ResponseEntity.ok("Livro atualizado com sucesso!");
         } catch (SQLException e) {
