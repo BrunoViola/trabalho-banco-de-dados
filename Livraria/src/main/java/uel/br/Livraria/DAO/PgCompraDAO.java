@@ -45,17 +45,12 @@ public class PgCompraDAO implements CompraDAO{
    @Override
    public void create(Compra compra) throws SQLException {
       try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY)) {
-            statement.setLong(1, compra.getNum_Nota_Fiscal().longValue());
-            java.util.Date dataCompra = compra.getData_Compra();
-            if (dataCompra != null) {
-               statement.setDate(2, new java.sql.Date(dataCompra.getTime()));
-            } else {
-               statement.setNull(2, java.sql.Types.DATE); //caso a data seja nula
-            }
-            statement.setBigDecimal(3, compra.getTotal());
-            statement.setString(4, compra.getCliente().getCPF());
+          statement.setLong(1, compra.getNum_Nota_Fiscal());
+          statement.setDate(2, compra.getData_Compra());
+          statement.setBigDecimal(3, compra.getTotal());
+          statement.setString(4, compra.getCliente().getCPF());
 
-            statement.executeUpdate();
+          statement.executeUpdate();
       } catch (SQLException ex) {
             Logger.getLogger(PgCompraDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
@@ -75,7 +70,7 @@ public class PgCompraDAO implements CompraDAO{
       Compra compra = new Compra();
 
       try (PreparedStatement statement = connection.prepareStatement(READ_QUERY)) {
-         statement.setLong(1, compra.getNum_Nota_Fiscal().longValue());
+         statement.setLong(1, Num_Nota_Fiscal);
          try (ResultSet result = statement.executeQuery()) {
                if (result.next()) {
                   compra.setNum_Nota_Fiscal(Num_Nota_Fiscal);
@@ -106,14 +101,10 @@ public class PgCompraDAO implements CompraDAO{
       String query = UPDATE_QUERY;
 
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-            java.util.Date dataCompra = compra.getData_Compra();
-            if (dataCompra != null) {
-               statement.setDate(1, new java.sql.Date(dataCompra.getTime()));
-            } else {
-               statement.setNull(1, java.sql.Types.DATE); //caso a data seja nula
-            }
-            statement.setBigDecimal(2, compra.getTotal());
-            statement.setString(3, compra.getCliente().getCPF());
+          statement.setDate(1, compra.getData_Compra());
+          statement.setBigDecimal(2, compra.getTotal());
+          statement.setString(3, compra.getCliente().getCPF());
+          statement.setLong(4, compra.getNum_Nota_Fiscal());
 
          if (statement.executeUpdate() < 1) {
             throw new SQLException("Erro ao editar: compra não encontrada.");
