@@ -1,5 +1,6 @@
 package uel.br.Livraria.DAO;
 
+import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Pertence;
 import uel.br.Livraria.Model.Genero;
 import uel.br.Livraria.Model.Livro;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Repository
 public class PgPertenceDAO implements PertenceDAO{
     private final Connection connection;
     private final PgGeneroDAO pgGeneroDAO;

@@ -1,5 +1,6 @@
 package uel.br.Livraria.DAO;
 
+import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Secao;
 
 import java.sql.Connection;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Repository
 public class PgSecaoDAO implements SecaoDAO{
    private final Connection connection;
 

@@ -1,5 +1,6 @@
 package uel.br.Livraria.DAO;
 
+import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Compra;
 import uel.br.Livraria.Model.Cliente;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Repository
 public class PgCompraDAO implements CompraDAO{
    private final Connection connection;
 

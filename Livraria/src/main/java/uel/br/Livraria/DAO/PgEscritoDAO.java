@@ -1,5 +1,6 @@
 package uel.br.Livraria.DAO;
 
+import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Autor;
 import uel.br.Livraria.Model.Escrito;
 import uel.br.Livraria.Model.Livro;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Repository
 public class PgEscritoDAO implements  EscritoDAO{
     private final Connection connection;
     private final PgAutorDAO pgAutorDAO;

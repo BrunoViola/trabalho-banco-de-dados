@@ -1,5 +1,6 @@
 package uel.br.Livraria.DAO;
 
+import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Autor;
 
 import java.sql.Connection;
@@ -11,9 +12,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Repository
 public class PgAutorDAO implements AutorDAO{
    private final Connection connection;
-
    public PgAutorDAO(Connection connection) {
       this.connection = connection;
    }
