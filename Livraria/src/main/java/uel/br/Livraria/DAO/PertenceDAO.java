@@ -6,4 +6,5 @@ import java.sql.SQLException;
 
 public interface PertenceDAO extends DAO<Pertence, Integer>{
    public void delete(Integer ID_Genero, Long ISBN_Livro) throws SQLException;
+   public Pertence read(Integer ID_Genero, Long ISBN_Livro) throws SQLException;
 }

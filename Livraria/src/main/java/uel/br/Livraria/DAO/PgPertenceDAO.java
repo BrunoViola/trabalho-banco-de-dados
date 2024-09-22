@@ -34,6 +34,8 @@ public class PgPertenceDAO implements PertenceDAO{
 
     private static final String ALL_QUERY =
             "SELECT ID_Genero, ISBN_Livro FROM livraria.Pertence ORDER BY ID_Genero;";
+    private static final String READ_QUERY = 
+            "SELECT * FROM livraria.Pertence WHERE (ID_Genero = ? AND ISBN_Livro = ?);";
 
     // ===== CREATE PERTENCE =====
     @Override
@@ -66,6 +68,41 @@ public class PgPertenceDAO implements PertenceDAO{
     }
     @Override
     public void delete(Integer ID) throws SQLException {
+    }
+
+    // ===== READ PERTENCE =====
+    @Override
+    public Pertence read(Integer ID_Genero, Long ISBN_Livro) throws SQLException {
+        Pertence pertence = new Pertence();
+
+        Genero genero;
+        Livro livro;
+        try (PreparedStatement statement = connection.prepareStatement(READ_QUERY)) {
+            statement.setLong(1, ID_Genero);
+            statement.setLong(2, ISBN_Livro);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    /*notaNum = result.getLong("num_nota_fiscal_compra");
+                    livroISBN = result.getLong("ISBN_Livro");*/
+                    genero = pgGeneroDAO.read(ID_Genero);
+                    livro = pgLivroDAO.read(ISBN_Livro);
+                    pertence.setGenero(genero);
+                    pertence.setLivro(livro);
+                } else {
+                    throw new SQLException("Erro ao visualizar: relacionamento 'pertence' não encontrado.");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PgPossuiDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+            if (ex.getMessage().equals("Erro ao visualizar: relacionamento 'pertence' não encontrado.")) {
+                throw ex;
+            } else {
+                throw new SQLException("Erro ao visualizar relacionamento 'pertence'.");
+            }
+        }
+
+        return pertence;
     }
 
     // ===== DELETE PERTENCE =====
