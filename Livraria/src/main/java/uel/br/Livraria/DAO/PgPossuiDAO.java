@@ -57,6 +57,8 @@ public class PgPossuiDAO implements PossuiDAO{
         try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY)) {
             statement.setLong(1, possui.getCompra().getNum_Nota_Fiscal());
             statement.setLong(2, possui.getLivro().getISBN());
+            statement.setInt(3, possui.getQuantidade());
+            statement.setBigDecimal(4, possui.getPreco());
 
             statement.executeUpdate();
         } catch (SQLException ex) {
@@ -74,11 +76,11 @@ public class PgPossuiDAO implements PossuiDAO{
 
     // ===== READ POSSUI =====
     @Override
-    public Possui read(Long Num_Nota_Fiscal_Compra, long ISBN_Livro) throws SQLException {
+    public Possui read(Long Num_Nota_Fiscal_Compra, Long ISBN_Livro) throws SQLException {
         Possui possui = new Possui();
 
-        long notaNum;
-        long livroISBN;
+        /*long notaNum;
+        long livroISBN;*/
         Compra compra;
         Livro livro;
         try (PreparedStatement statement = connection.prepareStatement(READ_QUERY)) {
@@ -86,10 +88,10 @@ public class PgPossuiDAO implements PossuiDAO{
             statement.setLong(2, ISBN_Livro);
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    notaNum = result.getLong("Num_Nota_Fiscal_Compra");
-                    livroISBN = result.getLong("ISBN_Livro");
-                    compra = pgCompraDAO.read(notaNum);
-                    livro = pgLivroDAO.read(livroISBN);
+                    /*notaNum = result.getLong("num_nota_fiscal_compra");
+                    livroISBN = result.getLong("ISBN_Livro");*/
+                    compra = pgCompraDAO.read(Num_Nota_Fiscal_Compra);
+                    livro = pgLivroDAO.read(ISBN_Livro);
                     possui.setCompra(compra);
                     possui.setLivro(livro);
                     possui.setQuantidade(result.getInt("Quantidade"));
@@ -139,7 +141,7 @@ public class PgPossuiDAO implements PossuiDAO{
 
     // ===== DELETE POSSUI =====
     @Override
-    public void delete(Long Num_Nota_Fiscal_Compra, long ISBN_Livro) throws SQLException {
+    public void delete(Long Num_Nota_Fiscal_Compra, Long ISBN_Livro) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)) {
             statement.setLong(1, Num_Nota_Fiscal_Compra);
             statement.setLong(2, ISBN_Livro);
