@@ -21,7 +21,7 @@ public class PgClienteDAO implements ClienteDAO{
 
     private static final String GET_BY_EMAIL =
             "SELECT CPF, Sexo, Data_nascimento, Pnome, Snome, Cidade, Estado FROM livraria.Cliente " +
-                    "WHERE Email = ?";
+                    "WHERE Email = ?;";
 
     private static final String CREATE_QUERY =
             "INSERT INTO livraria.Cliente(CPF, Sexo, Data_nascimento, Email, Pnome, Snome, Cidade, Estado) " + "VALUES(?, ?, ?, ?, ?, ?, ?, ?);";

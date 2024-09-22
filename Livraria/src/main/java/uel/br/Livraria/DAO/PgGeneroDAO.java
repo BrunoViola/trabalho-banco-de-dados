@@ -23,7 +23,7 @@ public class PgGeneroDAO implements GeneroDAO{
    }
 
    private static final String CREATE_QUERY =
-                                "INSERT INTO livraria.Genero (Nome, ID_Secao) VALUES (?, ?)";
+                                "INSERT INTO livraria.Genero (Nome, ID_Secao) VALUES (?, ?);";
 
    private static final String READ_QUERY =
                                 "SELECT Nome, ID_Secao FROM livraria.Genero WHERE ID = ?;";

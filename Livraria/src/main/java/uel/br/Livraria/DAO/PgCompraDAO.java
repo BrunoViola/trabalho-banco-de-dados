@@ -24,7 +24,7 @@ public class PgCompraDAO implements CompraDAO{
    }
 
    private static final String CREATE_QUERY =
-                                "INSERT INTO livraria.Compra (Num_Nota_Fiscal, Data_Compra, Total, CPF_Cliente) VALUES (?, ?, ?, ?)";
+                                "INSERT INTO livraria.Compra (Num_Nota_Fiscal, Data_Compra, Total, CPF_Cliente) VALUES (?, ?, ?, ?);";
 
    private static final String READ_QUERY =
                                 "SELECT Data_Compra, Total, CPF_Cliente FROM livraria.Compra WHERE Num_Nota_Fiscal = ?;";
