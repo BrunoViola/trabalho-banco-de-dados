@@ -2,6 +2,7 @@ package uel.br.Livraria.DAO;
 
 import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Autor;
+import uel.br.Livraria.Model.Editora;
 import uel.br.Livraria.Model.Livro;
 
 import java.sql.Connection;
@@ -16,10 +17,11 @@ import java.util.logging.Logger;
 @Repository
 public class PgAutorDAO implements DAO<Autor, Integer>{
    private final Connection connection;
-   private final PgLivroDAO pgLivroDAO;
+   private final PgEditoraDAO pgEditoraDAO;
+
    public PgAutorDAO(Connection connection) {
       this.connection = connection;
-      this.pgLivroDAO = new PgLivroDAO(connection);
+       this.pgEditoraDAO = new PgEditoraDAO(connection);
    }
 
    private static final String CREATE_QUERY =
@@ -49,8 +51,11 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
     private static final String CREATE_LIVROS_QUERY =
             "INSERT INTO livraria.Escrito (ID_Autor, ISBN_Livro) VALUES (?, ?)";
 
+    private static final String READ_LIVROS_QUERY =
+            "SELECT Titulo, Ano, Preco, Estoque, Descricao, ID_Editora FROM livraria.Livro " +
+                    "WHERE ISBN = ?;";
+
     // ===== LIST LIVROS POR AUTOR =====
-    //@Override
     private List<Livro> listLivrosByAutorId(Integer autorId) throws SQLException {
         List<Livro> livrosEscritos = new ArrayList<>();
 
@@ -64,7 +69,7 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
             while (result.next()) {
                 livro = new Livro();
                 livroISBN = result.getLong("ISBN_Livro");
-                livro = pgLivroDAO.read(livroISBN);
+                livro = readLivro(livroISBN);
 
                 livrosEscritos.add(livro);
             }
@@ -108,6 +113,42 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
             Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
             throw new SQLException("Erro ao adicionar livro ao autor.");
         }
+    }
+
+    // ===== READ LIVRO DO AUTOR =====
+    public Livro readLivro(Long ISBN) throws SQLException {
+        Livro livro = new Livro();
+
+        int editoraId;
+        Editora editora;
+        try (PreparedStatement statement = connection.prepareStatement(READ_LIVROS_QUERY)) {
+            statement.setLong(1, ISBN);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    livro.setISBN(ISBN);
+                    livro.setTitulo(result.getString("Titulo"));
+                    livro.setAno(result.getInt("Ano"));
+                    livro.setPreco(result.getBigDecimal("Preco"));
+                    livro.setEstoque(result.getInt("Estoque"));
+                    livro.setDescricao(result.getString("Descricao"));
+                    editoraId = result.getInt("ID_Editora");
+                    editora = pgEditoraDAO.read(editoraId);
+                    livro.setEditora(editora);
+                } else {
+                    throw new SQLException("Erro ao visualizar: livro não encontrado.");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PgLivroDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+            if (ex.getMessage().equals("Erro ao visualizar: livro não encontrado.")) {
+                throw ex;
+            } else {
+                throw new SQLException("Erro ao visualizar livro.");
+            }
+        }
+
+        return livro;
     }
 
    // ===== CREATE AUTOR =====
@@ -171,7 +212,7 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
       }
 
       return autor;
-   } 
+   }
 
    // ===== UPDATE AUTOR =====
    @Override
