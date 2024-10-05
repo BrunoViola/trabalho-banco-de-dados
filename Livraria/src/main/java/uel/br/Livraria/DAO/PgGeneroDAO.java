@@ -45,15 +45,18 @@ public class PgGeneroDAO implements GeneroDAO{
    
    
    // ====== BUSCA POR Nome e ID_Secao =====
-   public Genero getByNomeIDSecao(String Nome, Secao secao) throws SQLException {
+   public Genero getByNomeIDSecao(String Nome, int secao_id) throws SQLException {
       Genero genero = new Genero();
       try (PreparedStatement statement = connection.prepareStatement(GET_BY_NOME_IDSECAO)) {
          statement.setString(1, Nome);
-         statement.setInt(2, secao.getID());
+         statement.setInt(2, secao_id);
          try (ResultSet result = statement.executeQuery()) {
                if (result.next()) {
                   genero.setID(result.getInt("ID"));
                   genero.setNome(result.getString("Nome"));
+
+                  Secao secao = secaoDAO.read(secao_id);
+                  genero.setSecao(secao);
                } else {
                   throw new SQLException("Erro ao visualizar: gênero não encontrado.");
                }

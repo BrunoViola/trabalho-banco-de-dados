@@ -71,5 +71,20 @@ public class GeneroController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/nome-secao_id/{nome}/{secao_id}")
+    public ResponseEntity<Genero> obterGeneroPorNomeSecaoId(@PathVariable String nome, @PathVariable int secao_id) {
+        try {
+            Genero genero = pgGeneroDAO.getByNomeIDSecao(nome, secao_id);
+            if (genero != null) {
+                return ResponseEntity.ok(genero);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }
 

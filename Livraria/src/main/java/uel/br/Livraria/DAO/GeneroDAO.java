@@ -5,5 +5,5 @@ import uel.br.Livraria.Model.Genero;
 import uel.br.Livraria.Model. Secao;
 
 public interface GeneroDAO extends DAO<Genero, Integer>{
-   public Genero getByNomeIDSecao(String Nome, Secao secao) throws SQLException;
+   public Genero getByNomeIDSecao(String Nome, int secao_id) throws SQLException;
 }
