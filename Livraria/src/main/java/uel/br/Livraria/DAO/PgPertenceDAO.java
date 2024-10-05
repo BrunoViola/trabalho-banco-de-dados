@@ -61,13 +61,15 @@ public class PgPertenceDAO implements PertenceDAO{
     // Para satisfazer DAO:
     @Override
     public Pertence read(Integer ID) throws SQLException {
-        return null;
+        throw new SQLException("Leitura não suportada pela aplicação.");
     }
     @Override
     public void update(Pertence pertence) throws SQLException {
+        throw new SQLException("Atualização não suportada pela aplicação.");
     }
     @Override
     public void delete(Integer ID) throws SQLException {
+        throw new SQLException("Remoção não suportada pela aplicação.");
     }
 
     // ===== READ PERTENCE =====

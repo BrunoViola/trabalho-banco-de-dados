@@ -45,10 +45,11 @@ public class PgPossuiDAO implements PossuiDAO{
     // Para satisfazer DAO:
     @Override
     public Possui read(Integer ID) throws SQLException {
-        return null;
+        throw new SQLException("Leitura não suportada pela aplicação.");
     }
     @Override
     public void delete(Integer ID) throws SQLException {
+        throw new SQLException("Remoção não suportada pela aplicação.");
     }
 
     // ===== CREATE POSSUI =====

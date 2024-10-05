@@ -93,13 +93,15 @@ public class PgEscritoDAO implements  EscritoDAO{
     // Para satisfazer DAO:
     @Override
     public Escrito read(Integer ID) throws SQLException {
-        return null;
+        throw new SQLException("Leitura não suportada pela aplicação.");
     }
     @Override
     public void update(Escrito escrito) throws SQLException {
+        throw new SQLException("Atualização não suportada pela aplicação.");
     }
     @Override
     public void delete(Integer ID) throws SQLException {
+        throw new SQLException("Remoção não suportada pela aplicação.");
     }
 
     // ===== DELETE ESCRITO =====
