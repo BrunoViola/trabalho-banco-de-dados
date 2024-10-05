@@ -71,5 +71,19 @@ public class SecaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Secao> obterSecaoPorNome(@PathVariable String nome) {
+        try {
+            Secao secao = pgSecaoDAO.getByNome(nome);
+            if (secao != null) {
+                return ResponseEntity.ok(secao);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
 
