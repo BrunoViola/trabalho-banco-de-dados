@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uel.br.Livraria.DAO.PgEditoraDAO;
+import uel.br.Livraria.Model.Cliente;
 import uel.br.Livraria.Model.Editora;
 
 import java.sql.SQLException;
@@ -65,6 +66,20 @@ public class EditoraController {
         try {
             List<Editora> editoras = pgEditoraDAO.all();
             return ResponseEntity.ok(editoras);
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Editora> obterEditoraPorNome(@PathVariable String nome) {
+        try {
+            Editora editora = pgEditoraDAO.getByNome(nome);
+            if (editora != null) {
+                return ResponseEntity.ok(editora);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
