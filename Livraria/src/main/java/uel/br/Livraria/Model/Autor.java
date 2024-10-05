@@ -1,10 +1,22 @@
 package uel.br.Livraria.Model;
 
+import java.util.List;
+
 public class Autor {
     private Integer ID;
     private String Pnome;
     private String Snome;
     private String Nacionalidade;
+
+    private List<Livro> Livros;
+
+    public List<Livro> getLivros() {
+        return Livros;
+    }
+
+    public void setLivros(List<Livro> livros) {
+        Livros = livros;
+    }
 
     public Integer getID() {
         return ID;

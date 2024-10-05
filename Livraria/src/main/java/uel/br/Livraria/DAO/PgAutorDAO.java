@@ -2,6 +2,7 @@ package uel.br.Livraria.DAO;
 
 import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Autor;
+import uel.br.Livraria.Model.Livro;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,12 +16,14 @@ import java.util.logging.Logger;
 @Repository
 public class PgAutorDAO implements DAO<Autor, Integer>{
    private final Connection connection;
+   private final PgLivroDAO pgLivroDAO;
    public PgAutorDAO(Connection connection) {
       this.connection = connection;
+      this.pgLivroDAO = new PgLivroDAO(connection);
    }
 
    private static final String CREATE_QUERY =
-                                "INSERT INTO livraria.Autor(Pnome, Snome, Nacionalidade) " + "VALUES(?, ?, ?);";
+                                "INSERT INTO livraria.Autor(Pnome, Snome, Nacionalidade) " + "VALUES(?, ?, ?) RETURNING ID;";
 
    private static final String READ_QUERY =
                                 "SELECT Pnome, Snome, Nacionalidade FROM livraria.Autor " +
@@ -37,7 +40,77 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
    private static final String ALL_QUERY =
                                 "SELECT ID, Pnome, Snome, Nacionalidade FROM livraria.Autor ORDER BY ID;";
 
-   // ===== CREATE AUTOR =====                             
+    private static final String LIST_LIVROS_QUERY =
+            "SELECT ISBN_Livro FROM livraria.Escrito WHERE (ID_Autor = ?)";
+
+    private static final String DELETE_LIVROS_QUERY =
+            "DELETE FROM livraria.Escrito WHERE ID_Autor = ?";
+
+    private static final String CREATE_LIVROS_QUERY =
+            "INSERT INTO livraria.Escrito (ID_Autor, ISBN_Livro) VALUES (?, ?)";
+
+    // ===== LIST LIVROS POR AUTOR =====
+    //@Override
+    private List<Livro> listLivrosByAutorId(Integer autorId) throws SQLException {
+        List<Livro> livrosEscritos = new ArrayList<>();
+
+        long livroISBN;
+        Livro livro;
+
+        try (PreparedStatement statement = connection.prepareStatement(LIST_LIVROS_QUERY)) {
+            statement.setInt(1, autorId);
+
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                livro = new Livro();
+                livroISBN = result.getLong("ISBN_Livro");
+                livro = pgLivroDAO.read(livroISBN);
+
+                livrosEscritos.add(livro);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PgEscritoDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+            throw new SQLException("Erro ao encontrar livros a partir do id do autor.");
+        }
+
+        return livrosEscritos;
+    }
+
+    // ===== UPDATE LIVROS POR AUTOR =====
+   private void updateLivrosByAutorId(Integer autorId, List<Livro> novosLivros) throws SQLException {
+        removeLivrosByAutorId(autorId);
+
+        for (Livro livro : novosLivros) {
+            addLivroToAutor(autorId, livro);
+        }
+   }
+
+   // ===== REMOVE LIVROS POR AUTOR =====
+   private void removeLivrosByAutorId(Integer autorId) throws SQLException {
+       try (PreparedStatement statement = connection.prepareStatement(DELETE_LIVROS_QUERY)) {
+           statement.setInt(1, autorId);
+           statement.executeUpdate();
+       } catch (SQLException ex) {
+           Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+           throw new SQLException("Erro ao remover livros do autor.");
+       }
+   }
+
+   // ===== CREATE LIVROS do AUTOR =====
+    private void addLivroToAutor(Integer autorId, Livro livro) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_LIVROS_QUERY)) {
+            statement.setInt(1, autorId);
+            statement.setLong(2, livro.getISBN());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+            throw new SQLException("Erro ao adicionar livro ao autor.");
+        }
+    }
+
+   // ===== CREATE AUTOR =====
    @Override
     public void create(Autor autor) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY)) {
@@ -45,7 +118,11 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
             statement.setString(2, autor.getSnome());
             statement.setString(3, autor.getNacionalidade());
 
-            statement.executeUpdate();
+            try (ResultSet result = statement.executeQuery()){
+                if (result.next()) {
+                    autor.setID(result.getInt("ID"));
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
@@ -56,7 +133,13 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
            }else {
                throw new SQLException("Erro ao inserir autor.");
            }
-        }        
+        }
+
+       if (autor.getLivros() != null && !autor.getLivros().isEmpty()) {
+           for (Livro livro : autor.getLivros()) {
+               addLivroToAutor(autor.getID(), livro);
+           }
+       }
     }
    
    // ===== READ AUTOR =====
@@ -72,6 +155,7 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
                   autor.setPnome(result.getString("Pnome"));
                   autor.setSnome(result.getString("Snome"));
                   autor.setNacionalidade(result.getString("Nacionalidade"));
+                  autor.setLivros(listLivrosByAutorId(ID));
                } else {
                   throw new SQLException("Erro ao visualizar: autor não encontrado.");
                }
@@ -103,6 +187,8 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
          if (statement.executeUpdate() < 1) {
             throw new SQLException("Erro ao editar: autor não encontrado.");
          }
+
+         updateLivrosByAutorId(autor.getID(), autor.getLivros());
        } catch (SQLException ex) {
          Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
  
@@ -119,6 +205,7 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
    // ===== DELETE AUTOR =====
    @Override
    public void delete(Integer ID) throws SQLException {
+     removeLivrosByAutorId(ID);
      try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)) {
          statement.setInt(1, ID);
 
@@ -148,6 +235,8 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
             autor.setID(result.getInt("ID"));
             autor.setPnome(result.getString("Pnome"));
             autor.setSnome(result.getString("Snome"));
+            autor.setNacionalidade(result.getString("Nacionalidade"));
+            autor.setLivros(listLivrosByAutorId(result.getInt("ID")));
 
             autorList.add(autor);
          }
