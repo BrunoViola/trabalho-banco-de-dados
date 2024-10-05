@@ -1,7 +1,7 @@
 package uel.br.Livraria.Model;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.List;
 
 public class Livro {
     private Long ISBN;
@@ -11,6 +11,16 @@ public class Livro {
     private Integer Estoque;
     private String Descricao;
     private Editora editora;
+
+    private List<Autor> Autores;
+
+    public List<Autor> getAutores() {
+        return Autores;
+    }
+
+    public void setAutores(List<Autor> autores) {
+        Autores = autores;
+    }
 
     public long getISBN() {
         return ISBN;

@@ -1,6 +1,7 @@
 package uel.br.Livraria.DAO;
 
 import org.springframework.stereotype.Repository;
+import uel.br.Livraria.Model.Autor;
 import uel.br.Livraria.Model.Editora;
 import uel.br.Livraria.Model.Livro;
 
@@ -41,6 +42,107 @@ public class PgLivroDAO implements DAO<Livro, Long>{
     private static final String ALL_QUERY =
             "SELECT ISBN, Titulo, Ano, Preco, Estoque, Descricao, ID_Editora FROM livraria.Livro ORDER BY ISBN;";
 
+    private static final String LIST_AUTORES_QUERY =
+            "SELECT ID_Autor FROM livraria.Escrito WHERE (ISBN_Livro = ?)";
+
+    private static final String DELETE_AUTORES_QUERY =
+            "DELETE FROM livraria.Escrito WHERE ISBN_Livro = ?";
+
+    private static final String CREATE_AUTORES_QUERY =
+            "INSERT INTO livraria.Escrito (ID_Autor, ISBN_Livro) VALUES (?, ?)";
+
+    private static final String READ_AUTOR_QUERY =
+            "SELECT Pnome, Snome, Nacionalidade FROM livraria.Autor " +
+                    "WHERE ID = ?;";
+
+    // ===== LIST AUTORES POR LIVRO =====
+    private List<Autor> listAutoresByLivroISBN(Long livroISBN) throws SQLException {
+        List<Autor> autoresEscritos = new ArrayList<>();
+
+        int autorId;
+        Autor autor;
+
+        try (PreparedStatement statement = connection.prepareStatement(LIST_AUTORES_QUERY)) {
+            statement.setLong(1, livroISBN);
+
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                autor = new Autor();
+                autorId = result.getInt("ID_Autor");
+                autor = readAutor(autorId);
+
+                autoresEscritos.add(autor);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PgEscritoDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+            throw new SQLException("Erro ao encontrar autores a partir do ISBN dos livros.");
+        }
+
+        return autoresEscritos;
+    }
+
+    // ===== UPDATE AUTORES POR LIVRO =====
+    private void updateAutoresByLivroISBN(Long livroISBN, List<Autor> novosAutores) throws SQLException {
+        removeAutoresByLivroISBN(livroISBN);
+
+        for (Autor autor : novosAutores) {
+            addAutorToLivro(livroISBN, autor);
+        }
+    }
+
+    // ===== REMOVE AUTORES POR LIVRO =====
+    private void removeAutoresByLivroISBN(Long livroISBN) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_AUTORES_QUERY)) {
+            statement.setLong(1, livroISBN);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+            throw new SQLException("Erro ao remover autores do livro.");
+        }
+    }
+
+    // ===== CREATE LIVROS do AUTOR =====
+    private void addAutorToLivro(Long livroISBN, Autor autor) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_AUTORES_QUERY)) {
+            statement.setInt(1, autor.getID());
+            statement.setLong(2, livroISBN);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+            throw new SQLException("Erro ao adicionar autor ao livro.");
+        }
+    }
+
+    // ===== READ AUTOR DO LIVRO =====
+    public Autor readAutor(Integer ID) throws SQLException {
+        Autor autor = new Autor();
+
+        try (PreparedStatement statement = connection.prepareStatement(READ_AUTOR_QUERY)) {
+            statement.setInt(1, ID);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    autor.setID(ID);
+                    autor.setPnome(result.getString("Pnome"));
+                    autor.setSnome(result.getString("Snome"));
+                    autor.setNacionalidade(result.getString("Nacionalidade"));
+                } else {
+                    throw new SQLException("Erro ao visualizar: autor não encontrado.");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+            if (ex.getMessage().equals("Erro ao visualizar: autor não encontrado.")) {
+                throw ex;
+            } else {
+                throw new SQLException("Erro ao visualizar autor.");
+            }
+        }
+        return autor;
+    }
+
     // ===== CREATE LIVRO =====
     @Override
     public void create(Livro livro) throws SQLException {
@@ -65,6 +167,12 @@ public class PgLivroDAO implements DAO<Livro, Long>{
                 throw new SQLException("Erro ao inserir livro.");
             }
         }
+
+        if (livro.getAutores() != null && !livro.getAutores().isEmpty()) {
+            for (Autor autor : livro.getAutores()) {
+                addAutorToLivro(livro.getISBN(), autor);
+            }
+        }
     }
 
     // ===== READ LIVRO =====
@@ -87,6 +195,7 @@ public class PgLivroDAO implements DAO<Livro, Long>{
                     editoraId = result.getInt("ID_Editora");
                     editora = pgEditoraDAO.read(editoraId);
                     livro.setEditora(editora);
+                    livro.setAutores(listAutoresByLivroISBN(ISBN));
                 } else {
                     throw new SQLException("Erro ao visualizar: livro não encontrado.");
                 }
@@ -121,6 +230,8 @@ public class PgLivroDAO implements DAO<Livro, Long>{
             if (statement.executeUpdate() < 1) {
                 throw new SQLException("Erro ao editar: livro não encontrado.");
             }
+
+            updateAutoresByLivroISBN(livro.getISBN(), livro.getAutores());
         } catch (SQLException ex) {
             Logger.getLogger(PgLivroDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
@@ -137,6 +248,7 @@ public class PgLivroDAO implements DAO<Livro, Long>{
     // ===== DELETE LIVRO =====
     @Override
     public void delete(Long ISBN) throws SQLException {
+        removeAutoresByLivroISBN(ISBN);
         try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)) {
             statement.setLong(1, ISBN);
 
@@ -174,6 +286,7 @@ public class PgLivroDAO implements DAO<Livro, Long>{
                 editoraId = result.getInt("ID_Editora");
                 editora = pgEditoraDAO.read(editoraId);
                 livro.setEditora(editora);
+                livro.setAutores(listAutoresByLivroISBN(result.getLong("ISBN")));
 
                 livroList.add(livro);
             }
