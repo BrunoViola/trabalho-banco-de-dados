@@ -8,20 +8,20 @@ public class PgDAOFactory extends DAOFactory{
         this.connection = connection;
     }
 
-    @Override
+    /*@Override
     public AutorDAO getAutorDAO() {
         return new PgAutorDAO(this.connection);
-    }
+    }*/
 
     @Override
     public ClienteDAO getClienteDAO() {
         return new PgClienteDAO(this.connection);
     }
 
-    @Override
+    /*@Override
     public CompraDAO getCompraDAO() {
         return new PgCompraDAO(this.connection);
-    }
+    }*/
 
     @Override
     public EditoraDAO getEditoraDAO() {
@@ -33,10 +33,10 @@ public class PgDAOFactory extends DAOFactory{
         return new PgGeneroDAO(this.connection);
     }
 
-    @Override
+    /*@Override
     public LivroDAO getLivroDAO() {
         return new PgLivroDAO(this.connection);
-    }
+    }*/
 
     @Override
     public SecaoDAO getSecaoDAO() {

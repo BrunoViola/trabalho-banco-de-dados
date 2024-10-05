@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Repository
-public class PgCompraDAO implements CompraDAO{
+public class PgCompraDAO implements DAO<Compra, Long>{
    private final Connection connection;
 
    private final PgClienteDAO clienteDAO;

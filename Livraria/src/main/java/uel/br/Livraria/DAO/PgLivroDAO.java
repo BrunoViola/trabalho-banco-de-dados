@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Repository
-public class PgLivroDAO implements LivroDAO{
+public class PgLivroDAO implements DAO<Livro, Long>{
     private final Connection connection;
     private final PgEditoraDAO pgEditoraDAO;
 

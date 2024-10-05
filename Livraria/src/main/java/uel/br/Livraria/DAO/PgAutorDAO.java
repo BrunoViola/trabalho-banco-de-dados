@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Repository
-public class PgAutorDAO implements AutorDAO{
+public class PgAutorDAO implements DAO<Autor, Integer>{
    private final Connection connection;
    public PgAutorDAO(Connection connection) {
       this.connection = connection;
