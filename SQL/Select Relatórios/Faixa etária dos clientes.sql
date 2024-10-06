@@ -29,4 +29,9 @@ LEFT JOIN livraria.Cliente c ON
         ELSE EXTRACT(YEAR FROM AGE(CURRENT_DATE, c.data_nascimento)) >= 75
     END)
 GROUP BY fxs.Faixa_Etaria
-ORDER BY fxs.Faixa_Etaria;
+ORDER BY 
+	CASE 
+		WHEN fxs.Faixa_Etaria LIKE 'Menos%' THEN 0 -- Se a fx começar com 'Menos', 0 será atribuido para que ele seja exibido antes
+		ELSE 1
+		END,
+		fxs.Faixa_Etaria ASC;
