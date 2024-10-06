@@ -87,6 +87,7 @@ public class PgGraficoDAO implements GraficoDAO{
             "GROUP BY s.Nome\r\n" + //
             "ORDER BY Preco_Medio_Estoque DESC;";
    
+   //Vendas por Preço Médio
    private static final String GRAFICO_6_QUERY = "WITH faixas AS (\r\n" + //
             "    SELECT '0 - 9.99' AS Faixa_Preco, 0 AS Unidades_Vendidas\r\n" + //
             "    UNION ALL\r\n" + //
@@ -114,6 +115,7 @@ public class PgGraficoDAO implements GraficoDAO{
             "GROUP BY Faixa_Preco\r\n" + //
             "ORDER BY Faixa_Preco;";
 
+   //Vendas por mês
    private static final String GRAFICO_7_QUERY =
             "SELECT TO_CHAR(c.data_compra, 'Month') AS mes,\n" +
                 "    SUM(p.Preco * p.Quantidade) AS Total_Vendas\n" +
@@ -235,8 +237,8 @@ public class PgGraficoDAO implements GraficoDAO{
          try (ResultSet result = statement.executeQuery()) {
             while (result.next()) {
                Grafico grafico = new Grafico();
-               grafico.setMes(result.getString("Faixa_Preco"));
-               grafico.setTotalVendasMes(result.getBigDecimal("Unidades_Vendidas"));
+               grafico.setFaixaPreco(result.getString("Faixa_Preco"));
+               grafico.setUnidadesVendidasFaixa(result.getBigDecimal("Unidades_Vendidas"));
                ResultJSON.add(grafico);
             }
          }
