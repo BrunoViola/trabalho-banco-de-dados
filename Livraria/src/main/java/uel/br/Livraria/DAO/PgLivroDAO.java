@@ -87,7 +87,7 @@ public class PgLivroDAO implements DAO<Livro, Long>{
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(PgEscritoDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+            Logger.getLogger(PgLivroDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
             throw new SQLException("Erro ao encontrar autores a partir do ISBN dos livros.");
         }
@@ -175,7 +175,7 @@ public class PgLivroDAO implements DAO<Livro, Long>{
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(PgEscritoDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+            Logger.getLogger(PgLivroDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
             throw new SQLException("Erro ao encontrar generos a partir do ISBN dos livros.");
         }

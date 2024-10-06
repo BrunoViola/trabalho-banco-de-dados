@@ -78,7 +78,7 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(PgEscritoDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+            Logger.getLogger(PgAutorDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
             throw new SQLException("Erro ao encontrar livros a partir do id do autor.");
         }

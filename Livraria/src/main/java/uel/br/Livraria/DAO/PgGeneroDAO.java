@@ -82,7 +82,7 @@ public class PgGeneroDAO implements GeneroDAO{
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(PgEscritoDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+            Logger.getLogger(PgGeneroDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
 
             throw new SQLException("Erro ao encontrar livros a partir do id do gênero.");
         }
