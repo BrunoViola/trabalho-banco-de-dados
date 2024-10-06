@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.stereotype.Repository;
 import uel.br.Livraria.Model.Grafico;
 
+@Repository
 public class PgGraficoDAO implements GraficoDAO{
    private final Connection connection; 
    private static final String GRAFICO_1_QUERY = "SELECT concat(a.Pnome,' ', a.Snome) AS \"Nome Autor\", \n" +
@@ -111,6 +113,15 @@ public class PgGraficoDAO implements GraficoDAO{
             "LEFT JOIN livraria.Possui ps ON ps.ISBN_Livro = l.ISBN\r\n" + //
             "GROUP BY Faixa_Preco\r\n" + //
             "ORDER BY Faixa_Preco;";
+
+   private static final String GRAFICO_7_QUERY =
+            "SELECT TO_CHAR(c.data_compra, 'Month') AS mes,\n" +
+                "    SUM(p.Preco * p.Quantidade) AS Total_Vendas\n" +
+                "FROM livraria.Compra c\n" +
+                "JOIN livraria.Possui p ON c.Num_Nota_Fiscal = p.Num_Nota_Fiscal_Compra\n" +
+                "GROUP BY mes\n" +
+                "ORDER BY mes DESC\n" +
+                "LIMIT 6;";
 
    public PgGraficoDAO(Connection connection) {
       this.connection = connection;
@@ -224,8 +235,8 @@ public class PgGraficoDAO implements GraficoDAO{
          try (ResultSet result = statement.executeQuery()) {
             while (result.next()) {
                Grafico grafico = new Grafico();
-               grafico.setMes(result.getString("Mes"));
-               grafico.setTotalVendasMes(result.getBigDecimal("Total_Vendas"));
+               grafico.setMes(result.getString("Faixa_Preco"));
+               grafico.setTotalVendasMes(result.getBigDecimal("Unidades_Vendidas"));
                ResultJSON.add(grafico);
             }
          }
@@ -234,6 +245,26 @@ public class PgGraficoDAO implements GraficoDAO{
   
          throw new SQLException("Erro dados");
       }     
+      return ResultJSON;
+   }
+
+   @Override
+   public List<Grafico> getGrafico7() throws SQLException {
+      List<Grafico> ResultJSON = new ArrayList<>();
+      try (PreparedStatement statement = connection.prepareStatement(GRAFICO_7_QUERY)) {
+         try (ResultSet result = statement.executeQuery()) {
+            while (result.next()) {
+               Grafico grafico = new Grafico();
+               grafico.setMes(result.getString("Mes"));
+               grafico.setTotalVendasMes(result.getBigDecimal("Total_Vendas"));
+               ResultJSON.add(grafico);
+            }
+         }
+      } catch (SQLException ex) {
+         Logger.getLogger(PgGraficoDAO.class.getName()).log(Level.SEVERE, "DAO", ex);
+
+         throw new SQLException("Erro dados");
+      }
       return ResultJSON;
    }
 
