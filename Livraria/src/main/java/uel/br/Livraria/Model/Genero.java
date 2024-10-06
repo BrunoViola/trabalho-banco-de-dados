@@ -1,9 +1,21 @@
 package uel.br.Livraria.Model;
 
+import java.util.List;
+
 public class Genero {
     private Integer ID;
     private String Nome;
     private Secao secao;
+
+    private List<Livro> Livros;
+
+    public List<Livro> getLivros() {
+        return Livros;
+    }
+
+    public void setLivros(List<Livro> livros) {
+        Livros = livros;
+    }
 
     public Integer getID() {
         return ID;
