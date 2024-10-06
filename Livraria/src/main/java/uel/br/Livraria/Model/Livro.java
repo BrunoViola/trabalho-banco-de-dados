@@ -11,8 +11,16 @@ public class Livro {
     private Integer Estoque;
     private String Descricao;
     private Editora editora;
-
     private List<Autor> Autores;
+    private List<Genero> Generos;
+
+    public List<Genero> getGeneros() {
+        return Generos;
+    }
+
+    public void setGeneros(List<Genero> generos) {
+        Generos = generos;
+    }
 
     public List<Autor> getAutores() {
         return Autores;

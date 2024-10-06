@@ -18,10 +18,12 @@ import java.util.logging.Logger;
 public class PgAutorDAO implements DAO<Autor, Integer>{
    private final Connection connection;
    private final PgEditoraDAO pgEditoraDAO;
+   private final PgLivroDAO pgLivroDAO;
 
    public PgAutorDAO(Connection connection) {
       this.connection = connection;
-       this.pgEditoraDAO = new PgEditoraDAO(connection);
+      this.pgEditoraDAO = new PgEditoraDAO(connection);
+      this.pgLivroDAO = new PgLivroDAO(connection);
    }
 
    private static final String CREATE_QUERY =
@@ -70,6 +72,7 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
                 livro = new Livro();
                 livroISBN = result.getLong("ISBN_Livro");
                 livro = readLivro(livroISBN);
+                livro.setGeneros(pgLivroDAO.listGenerosByLivroISBN(livroISBN));
 
                 livrosEscritos.add(livro);
             }
@@ -134,6 +137,7 @@ public class PgAutorDAO implements DAO<Autor, Integer>{
                     editoraId = result.getInt("ID_Editora");
                     editora = pgEditoraDAO.read(editoraId);
                     livro.setEditora(editora);
+                    livro.setGeneros(pgLivroDAO.listGenerosByLivroISBN(ISBN));
                 } else {
                     throw new SQLException("Erro ao visualizar: livro não encontrado.");
                 }
