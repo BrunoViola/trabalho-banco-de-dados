@@ -64,7 +64,7 @@ public class PgGraficoDAO implements GraficoDAO{
             "\t\tEND,\r\n" + //
             "\t\tfxs.Faixa_Etaria ASC;";
 
-   private static final String GRAFICO_3_QUERY = "SELECT cl.Sexo, AVG(cp.Total) AS Total_Vendas\r\n" + //
+   private static final String GRAFICO_3_QUERY = "SELECT cl.Sexo, AVG(cp.Total) AS Total_Vendas , COUNT(cl.cpf) Quantidade_clientes\r\n" + //
             "FROM livraria.Cliente cl\r\n" + //
             "JOIN livraria.Compra cp ON cp.CPF_Cliente = cl.CPF\r\n" + //
             "GROUP BY cl.Sexo\r\n" + //
@@ -118,13 +118,14 @@ public class PgGraficoDAO implements GraficoDAO{
 
    //Vendas por mês
    private static final String GRAFICO_7_QUERY =
-            "SELECT TO_CHAR(c.data_compra, 'Month') AS mes,\n" +
-                "    SUM(p.Preco * p.Quantidade) AS Total_Vendas\n" +
-                "FROM livraria.Compra c\n" +
-                "JOIN livraria.Possui p ON c.Num_Nota_Fiscal = p.Num_Nota_Fiscal_Compra\n" +
-                "GROUP BY c.data_compra\n" +
-                "ORDER BY EXTRACT ('Month' From c.data_compra) ASC\n" +
-                "LIMIT 6;";
+            "SELECT \n" +
+            "    TO_CHAR(c.data_compra, 'Month') AS mes,\n" +
+            "    SUM(p.Preco * p.Quantidade) AS Total_Vendas\n" +
+            "FROM livraria.Compra c\n" +
+            "JOIN livraria.Possui p ON c.Num_Nota_Fiscal = p.Num_Nota_Fiscal_Compra\n" +
+            "WHERE c.data_compra >= CURRENT_DATE - INTERVAL '6 months'\n" +
+            "GROUP BY EXTRACT(YEAR FROM c.data_compra), EXTRACT(MONTH FROM c.data_compra), TO_CHAR(c.data_compra, 'Month')\n" +
+            "ORDER BY EXTRACT(YEAR FROM c.data_compra) DESC, EXTRACT(MONTH FROM c.data_compra);\n";
 
    public PgGraficoDAO(Connection connection) {
       this.connection = connection;
@@ -179,6 +180,7 @@ public class PgGraficoDAO implements GraficoDAO{
                Grafico grafico = new Grafico();
                grafico.setSexo(result.getString("Sexo").charAt(0));
                grafico.setGastoMedioSexo(result.getBigDecimal("Total_Vendas"));
+               grafico.setQuantidadePessoasFaixas(result.getInt("Quantidade_clientes"));
                ResultJSON.add(grafico);
             }
          }

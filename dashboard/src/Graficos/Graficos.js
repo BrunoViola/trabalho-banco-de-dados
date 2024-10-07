@@ -195,7 +195,8 @@ const Graficos = () => {
 
     const resultGrafico3 = await api.get("/dados/grafico3");
     const labelsGrafico3 = resultGrafico3?.data?.map(element => { return String(element.sexo) })
-    const valuesGrafico3 = resultGrafico3?.data?.map(element => { return String(element.gastoMedioSexo) })
+    const vendasGrafico3 = resultGrafico3?.data?.map(element => { return String(element.gastoMedioSexo) })
+    const quantidadeGrafico3 = resultGrafico3?.data?.map(element => { return String(element.quantidadePessoasFaixas) })
 
     const dataGrafico3 = {
         labels: labelsGrafico3,
@@ -203,9 +204,16 @@ const Graficos = () => {
         {
             fill: true,
             label: 'Gasto médio',
-            data: valuesGrafico3,
+            data: vendasGrafico3,
             borderColor: 'rgba(211, 84, 0, 1)',
             backgroundColor: 'rgba(243, 156, 18, 0.6)',
+        },
+        {
+            fill: true,
+            label: 'Quantidade de clientes',
+            data: quantidadeGrafico3,
+            borderColor: 'rgba(176, 58, 46, 1)',
+            backgroundColor: 'rgba(192, 57, 43, 0.6)'
         },
         ],
     }
