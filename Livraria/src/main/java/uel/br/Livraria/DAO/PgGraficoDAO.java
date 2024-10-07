@@ -122,8 +122,8 @@ public class PgGraficoDAO implements GraficoDAO{
                 "    SUM(p.Preco * p.Quantidade) AS Total_Vendas\n" +
                 "FROM livraria.Compra c\n" +
                 "JOIN livraria.Possui p ON c.Num_Nota_Fiscal = p.Num_Nota_Fiscal_Compra\n" +
-                "GROUP BY mes\n" +
-                "ORDER BY mes DESC\n" +
+                "GROUP BY c.data_compra\n" +
+                "ORDER BY EXTRACT ('Month' From c.data_compra) ASC\n" +
                 "LIMIT 6;";
 
    public PgGraficoDAO(Connection connection) {
