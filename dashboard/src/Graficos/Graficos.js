@@ -113,6 +113,20 @@ export const optionsGrafico6 = {
     },
 }
 
+export const optionsGrafico7 = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+      legend: {
+      position: 'top',
+      },
+      title: {
+      display: true,
+      text: 'Vendas dos últimos 6 meses',
+      },
+  },
+}
+
 const Graficos = () => {
   const [grafico1, setGrafico1] = useState(null);
   const [grafico2, setGrafico2] = useState(null);
@@ -120,7 +134,7 @@ const Graficos = () => {
   const [grafico4, setGrafico4] = useState(null);
   const [grafico5, setGrafico5] = useState(null);
   const [grafico6, setGrafico6] = useState(null);
-  //const [grafico7, setGrafico7] = useState(null);
+  const [grafico7, setGrafico7] = useState(null);
 
   useEffect(() => {
     getData();
@@ -254,6 +268,24 @@ const Graficos = () => {
       ],
     }
     setGrafico6(dataGrafico6);
+
+    const resultGrafico7 = await api.get("/dados/grafico7");
+    const labelsGrafico7 = resultGrafico7?.data?.map(element => { return String(element.mes) })
+    const valuesGrafico7 = resultGrafico7?.data?.map(element => { return String(element.totalVendasMes) })
+
+    const dataGrafico7 = {
+      labels: labelsGrafico7,
+      datasets: [
+        {
+          fill: true,
+          label: 'Total de Vendas',
+          data: valuesGrafico7,
+          borderColor: 'rgba(112, 112, 112, 1)',
+          backgroundColor: 'rgba(211, 211, 211, 0.5)',
+        },
+      ],
+    }
+    setGrafico7(dataGrafico7);
   }
       
     //Fazer para demais gráficos
@@ -284,6 +316,11 @@ const Graficos = () => {
           </div>
           <div className="col-lg-6 chart">
             {grafico6 && <Bar options={optionsGrafico6} data={grafico6} />}
+          </div>
+        </div>
+        <div className="row r">
+          <div className="col-lg-6 chart">
+            {grafico7 && <Line options={optionsGrafico7} data={grafico7} />}
           </div>
         </div>
       </div>
