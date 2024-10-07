@@ -38,7 +38,7 @@ export const optionsGrafico1 = {
       },
       title: {
         display: true,
-        text: 'Autores mais vendidos',
+        text: '5 autores mais vendidos',
       },
     },
 }
@@ -80,7 +80,7 @@ export const optionsGrafico4 = {
         },
         title: {
         display: true,
-        text: 'Localidades que mais compram',
+        text: '5 localidades que mais compram',
         },
     },
 }
@@ -319,7 +319,7 @@ const Graficos = () => {
           </div>
         </div>
         <div className="row r">
-          <div className="col-lg-6 chart">
+          <div className="col-lg-12 chart">
             {grafico7 && <Line options={optionsGrafico7} data={grafico7} />}
           </div>
         </div>

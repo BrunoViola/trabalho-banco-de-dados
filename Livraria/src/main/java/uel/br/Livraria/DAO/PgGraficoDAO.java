@@ -76,7 +76,8 @@ public class PgGraficoDAO implements GraficoDAO{
             "WHERE cp.Data_Compra BETWEEN '2023-09-29' AND '2024-10-06'\r\n" + //
             "GROUP BY Localizacao\r\n" + //
             "HAVING SUM(cp.Total)>90\r\n" + //
-            "ORDER BY Total_Gasto DESC;";
+            "ORDER BY Total_Gasto DESC " + //
+            "LIMIT 5;" ;
    
    private static final String GRAFICO_5_QUERY = "SELECT s.Nome, AVG(l.Preco) AS Preco_Medio_Estoque, COALESCE(AVG(psi.Preco),0) as Preco_Medio_Compras\r\n" + //
             "FROM livraria.Livro l\r\n" + //
